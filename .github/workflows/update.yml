@@ -11,6 +11,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
+      # Ensure the update-readme.sh script is executable
+      - run: chmod +x "${GITHUB_WORKSPACE}/update-readme.sh"
+
+      # Run the update-readme.sh script
       - run: |
           "${GITHUB_WORKSPACE}/update-readme.sh"
 
