@@ -51,5 +51,5 @@ for element in "${sorted_array[@]}"; do
     mv feed.json.tmp feed.json
 
     # Add entry to README.md
-    echo "- $date: [$title](https://github.com/krisyotam/til/blob/master/$filename)" >> README.md
+    echo "- $date: [$title](https://github.com/krisyotam/til/blob/main/$filename)" >> README.md
 done
