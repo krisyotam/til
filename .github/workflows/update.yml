@@ -2,7 +2,7 @@ name: Update README.md when new TIL is added.
 
 on:
   push:
-    branches: [master]
+    branches: [main]
 
 jobs:
   update:
