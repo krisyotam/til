@@ -68,11 +68,19 @@ echo -e "_**${num_items}** TILs and counting..._\n" >> README.md
 # Build JSON array and README entries with IDs
 json_data=()
 id=$((num_items))  # Start ID from total count (newest gets highest)
+used_dates=()      # Array to track used dates
+
 for element in "${sorted_array[@]}"; do
   IFS=':' read -r date filename title <<< "$element"
   new_filename="$dir/$id.md"
   
-  # Rename the file
+  # Ensure unique date for each post
+  while [[ " ${used_dates[*]} " =~ " $date " ]]; do
+    date=$(random_date)
+  done
+  used_dates+=("$date")
+  
+  # Rename the file if needed
   if [[ "$filename" != "$new_filename" ]]; then
     mv "$filename" "$new_filename"
     git add "$filename" "$new_filename"  # Stage the rename for Git
@@ -82,9 +90,8 @@ for element in "${sorted_array[@]}"; do
   
   # Read the file content
   if grep -q "^---$" "$new_filename"; then
-    # For files with YAML, extract content without frontmatter and prepend title
+    # For files with YAML, extract content without frontmatter but DO NOT prepend the title
     content=$(sed -e '1{/^---$/!q;};/^---$/,/^---$/d' "$new_filename")
-    content="# $title\n\n$content"
   else
     # For files without YAML, just read the content normally
     content=$(cat "$new_filename")
@@ -93,7 +100,7 @@ for element in "${sorted_array[@]}"; do
   # Add to README.md
   echo "- $date: [$title](https://github.com/krisyotam/til/blob/main/$path)" >> README.md
 
-  # Collect JSON data with ID
+  # Collect JSON data
   json_data+=("$(jq -n \
     --arg content "$content" \
     --arg date "$date" \
