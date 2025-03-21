@@ -24,15 +24,18 @@ random_date() {
 # Collect metadata for existing files
 for filename in "$dir"/*; do
   if [[ -f "$filename" ]]; then
-    # Check for YAML front matter and extract date
+    # Check for YAML front matter
     if grep -q "^---$" "$filename"; then
       date=$(sed -n '/^---$/,/^---$/p' "$filename" | grep "^date:" | sed 's/date: //;s/ *$//')
+      title=$(sed -n '/^---$/,/^---$/p' "$filename" | grep "^title:" | sed 's/title: //;s/ *$//')
       if [[ -z "$date" || ! "$date" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
         echo "Warning: Invalid or missing date in YAML for $filename, assigning random date" >&2
         date=$(random_date)
       fi
-      # Extract title from first # line after YAML
-      title=$(sed -n '/^---$/,/^---$/d;/^#/p' "$filename" | head -n 1 | sed 's/# //')
+      if [[ -z "$title" ]]; then
+        echo "Warning: No title in YAML for $filename, using first # header" >&2
+        title=$(sed -n '/^---$/,/^---$/d;/^#/p' "$filename" | head -n 1 | sed 's/# //')
+      fi
     else
       echo "Warning: No YAML front matter in $filename, assigning random date" >&2
       date=$(random_date)
@@ -46,8 +49,8 @@ for filename in "$dir"/*; do
   fi
 done
 
-# Sort files by date (ascending, oldest first, newest last)
-mapfile -t sorted_array < <(printf "%s\n" "${til_array[@]}" | sort -t':' -k1,1)
+# Sort files by date (descending, newest first, oldest last)
+mapfile -t sorted_array < <(printf "%s\n" "${til_array[@]}" | sort -r -t':' -k1,1)
 
 # Count the number of items
 num_items="${#sorted_array[@]}"
@@ -55,25 +58,40 @@ num_items="${#sorted_array[@]}"
 # Add summary line to README.md
 echo -e "_**${num_items}** TILs and counting..._\n" >> README.md
 
-# Build JSON array and README entries
+# Build JSON array and README entries with IDs
 json_data=()
+id=$((num_items))  # Start ID from total count (newest gets highest)
 for element in "${sorted_array[@]}"; do
   IFS=':' read -r date filename title <<< "$element"
-  path=$(basename "$filename")
-  content=$(cat "$filename")
+  new_filename="$dir/$id.md"
+  
+  # Rename the file
+  if [[ "$filename" != "$new_filename" ]]; then
+    mv "$filename" "$new_filename"
+    git add "$filename" "$new_filename"  # Stage the rename for Git
+  fi
+  
+  path=$(basename "$new_filename")
+  content=$(cat "$new_filename")
 
   # Add to README.md
   echo "- $date: [$title](https://github.com/krisyotam/til/blob/main/$path)" >> README.md
 
-  # Collect JSON data
+  # Collect JSON data with ID
   json_data+=("$(jq -n \
     --arg content "$content" \
     --arg date "$date" \
     --arg path "$path" \
     --arg title "$title" \
-    '{"content": $content, "date": $date, "path": $path, "title": $title}')"
+    --argjson id "$id" \
+    '{"content": $content, "date": $date, "path": $path, "title": $title, "id": $id}')"
   )
+  
+  id=$((id - 1))  # Decrement ID for next (older) entry
 done
 
 # Write feed.json in one go
 printf '%s\n' "${json_data[@]}" | jq -s '.' > feed.json
+
+# Stage renamed files and updated README.md/feed.json for commit
+git add README.md feed.json
