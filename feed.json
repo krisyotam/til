@@ -1,0 +1,704 @@
+[
+  {
+    "content": "# There are 22\n\n[Adam Argyle](https://nerdy.dev/) has written a [Codepen](https://codepen.io/argyleink/pen/oNxbNzy) that lists the different units.\n\nTo learn more about what each unit means:\n- [Adam Argyle: New CSS Relative Units](https://nerdy.dev/new-relative-units-ric-rex-rlh-and-rch)\n- [CSS length](https://developer.mozilla.org/en-US/docs/Web/CSS/length)\n- [CSS Values and Units](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units)\n- [W3C CSS Values and Units](https://www.w3.org/TR/css-values-4)\n\n## Relative\n\n| Unit | Definition |\n|------|------------|\n| % | Percentage of the parent element's font size |\n| em | Font size of the element |\n| ex | Height of the element's font |\n| ch | Width of the \"0\" (zero) character of the element's font |\n| cap | Hight of the capital letters of the element's font |\n| ic | [Advance measure](https://developer.mozilla.org/en-US/docs/Glossary/Advance_measure) of the `水` CJK (Chinese/Japanese/Korean) character of the element's font |\n| lh | Height of the element's line height |\n\n## Root Relative\n\n| Unit | Definition |\n|------|------------|\n| rem | Font size of the root element |\n| rex | Height of the root element's font |\n| rch | Width of the \"0\" (zero) character of the root element's font |\n| rlh | Height of the root element's line height |\n| ric | [Advance measure](https://developer.mozilla.org/en-US/docs/Glossary/Advance_measure) of the `水` CJK (Chinese/Japanese/Korean) character of the root element's font |\n| rcap | Height of the capital letters of the root element's font |\n\n## Absolute\n\n| Unit | Definition |\n|------|------------|\n| px | Pixels |\n| pt | Points |\n| pc | Picas |\n| in | Inches |\n| cm | Centimeters |\n| mm | Millimeters |\n| Q | Quarter-millimeters |\n\n## Viewport\n\n| Unit | Definition |\n|------|------------|\n| vw | Viewport width |\n| vh | Viewport height |\n| vi | Viewport inches |\n| vb | Viewport breadths |\n| dvw | Dynamic viewport width |\n| dvh | Dynamic viewport height |\n| dvi | Dynamic viewport inches |\n| dvb | Dynamic viewport breadths |\n| svw | Smallest possible viewport width |\n| svh | Smallest possible viewport height |\n| svi | Smallest possible viewport inches |\n| svb | Smallest possible viewport breadths |\n| lvw | Largest possible viewport width |\n| lvh | Largest possible viewport height |\n| lvi | Largest possible viewport inches |\n| lvb | Largest possible viewport breadths |\n| vmin | Smallest value between the viewport's width and height |\n| vmax | Largest value between the viewport's width and height |\n\n## Container\n\nSee [CSS Container Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries).\n\n| Unit | Definition |\n|------|------------|\n| cqw | Container width |\n| cqh | Container height |\n| cqi | Container inches |\n| cqb | Container breadths |\n| cqmin | Smallest value between the element's parent container's width and height |\n| cqmax | Largests value between the element's parent container's width and height |",
+    "date": "2025-01-30",
+    "path": "1-30-2025",
+    "title": "There are 22"
+  },
+  {
+    "content": "# Use Zod to validate File input\n\nYou can use [Zod](https://zod.dev/)'s `instanceof` validator to validate file inputs:\n\n```js\nconst MAX_UPLOAD_SIZE = 1024 * 1024 * 3; // 3MB\nconst ACCEPTED_FILE_TYPES = ['image/png'];\n\nconst Schema = z\n  .instanceof(File)\n  .optional()\n  .refine((file) => {\n    return !file || file.size <= MAX_UPLOAD_SIZE;\n  }, 'File size must be less than 3MB')\n  .refine((file) => {\n    return ACCEPTED_FILE_TYPES.includes(file.type);\n  }, 'File must be a PNG');\n```\n\nAbove example validates the file is the correct max file size and file type.",
+    "date": "2025-01-24",
+    "path": "zod-validate-file.md",
+    "title": "Use Zod to validate File input"
+  },
+  {
+    "content": "# X-Robots-Tag\n\nThe HTTP Header `X-Robots-Tag` is used to instruct search engines on how it should handle indexing the page. It takes in any rule that can be specified in the robots `meta` tag (`<meta name=\"robots\" content=\"noindex\">`).\n\nThere is a whole list of values that can be used: [https://http.dev/x-robots-tag](https://http.dev/x-robots-tag).\n\nI noticed it being used on Netlify preview URLs ([example](https://63d7d47fe551c0248a252eb7--petermekhaeil.netlify.app)):\n\n```\nX-Robots-Tag: noindex \n```\n\nWhich makes sense because these are draft URLs that should not be indexed.",
+    "date": "2025-01-24",
+    "path": "x-robots-tag.md",
+    "title": "X-Robots-Tag"
+  },
+  {
+    "content": "# Remove debugger statements in Vite\n\nWe can use esbuild's [drop](https://esbuild.github.io/api/#drop) option to remove `console` APIs and `debugger` statements from our code when we build our application.\n\n```js\nexport default defineConfig({\n    esbuild: {\n      drop: ['console', 'debugger']\n    }\n});\n```",
+    "date": "2025-01-24",
+    "path": "vite-remove-console-debugger.md",
+    "title": "Remove debugger statements in Vite"
+  },
+  {
+    "content": "# Delete lines in vi\n\nYou can delete a single or multiple lines in normal mode:\n\n- **Delete a single line:** `dd`\n- **Delete multiple lines:** `[n]dd` (n = number of lines)\n\nYou can delete a range of lines in command mode:\n\n- **Delete range of lines:** `:[from],[to]d`\n\nThere is special characters you can use in the range:\n\n- `.`: The current line.\n- `$`: The last line.\n- `%`: All lines.\n\nExamples on using the range:\n\n- `:5,10d`: Delete lines from 5 to 10.\n- `:.,$d`: Delete from the current line to the end of file.\n- `:.,1d`: Delete from the current line to the beginning of file.\n- `:5,$d`: Delete from line 5 to end of file.\n- `:%d`: Delete all lines.",
+    "date": "2025-01-24",
+    "path": "vi-delete-lines.md",
+    "title": "Delete lines in vi"
+  },
+  {
+    "content": "# Using Netlify Redirects to build a URL Shortener\n\n[Netlify Redirects](https://docs.netlify.com/routing/redirects/) makes for an excellent personal URL Shortener. See [pmekh.com](https://github.com/petermekhaeil/pmekh.com) for an example.\n\nCreate a `_redirects` in a new repository and add the redirects. It supports external URLs too. Add a fallback to redirect users to another site, for example your own personal blog.\n\n```\n# _redirects\n\n/til            https://petermekhaeil.com/today-i-learned/\n/twitter        https://twitter.com/PMekhaeil\n/*              https://petermekhaeil.com\n```\n\nThen create a new Netlify site and link it to your new repository. The `_redirect` is all that is required for the site to be used as a URL shortener.\n\n\nInspired by Cassidy's [cass.run](https://github.com/cassidoo/cass.run) and Kent's [netlify-shortener](https://github.com/kentcdodds/netlify-shortener). ",
+    "date": "2025-01-24",
+    "path": "using-netlify-redirects-to-build-a-url-shortener.md",
+    "title": "Using Netlify Redirects to build a URL Shortener"
+  },
+  {
+    "content": "# Using GitHub Actions to push changes\n\nWe can use [GitHub Actions](https://docs.github.com/en/actions) to push a new commit each time there is a new change detected. \n\nI've recently had to do this to automate updating `README.md` with a listing of the repository files each time a new push has been detected. The GitHub workflow is found [here](https://github.com/petermekhaeil/til/blob/master/.github/workflows/update.yml).\n\nHere are the learnings that may come useful to others:\n\n## Using bash to clear file content\n\n```bash\ncat /dev/null > README.md\n```\n`/dev/null` is a pseudo file in Linux that has no output so we can override a file with this empty content.\n\n## Using bash to echo a string with new line\n\n```bash\necho -e '# Today I Learned\\n' > README.md\n```\n\n`-e` is required to escape backslashes. This allows us to print new line (`\\n`) when outputting to a file.\n\n## Using bash to read the first line of a file\n\n```bash\nhead -n 1 $filename\n```\n\n## Using bash to remove characters from a string\n\n```bash\necho '# Title' | sed 's/# //'\n```\n\n`sed` is short for `Stream EDitor` and one of its common uses is pattern replacement. The above will remove `# ` from the string (by replacing it with an empty string).\n\n## Using bash to append string to file\n\n```bash\necho 'My string' >> README.md\n```\n\nThe `>>` operator is used to append to a file (or create the file if it does not exist).\n\n## Using GitHub Actions to push changes to a repository\n\n[actions/checkout](https://github.com/actions/checkout) is an offical GitHub Action that can checkout a repository. We can also use this to [push changes back](https://github.com/actions/checkout#Push-a-commit-using-the-built-in-token).\n\n```yaml\non: push\njobs:\n  update:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v2\n      - run: |\n          # Clear README.md\n          cat /dev/null > README.md\n\n          # Add Title\n          echo -e '# Today I Learned\\n' > README.md\n\n          # Loop through all TILs and add to README.md\n          dir=./learnings\n          for filename in \"$dir\"/*\n          do\n            title=$(head -n 1 $filename | sed 's/# //')\n            echo \"- [$title](https://github.com/petermekhaeil/til/blob/master/$filename)\" >> README.md\n          done\n\n          # Push changes\n          git config user.name github-actions\n          git config user.email github-actions@github.com\n          git add README.md\n          git commit -m \"Update README.md\"\n          git push\n```",
+    "date": "2025-01-24",
+    "path": "using-github-actions-to-push-changes.md",
+    "title": "Using GitHub Actions to push changes"
+  },
+  {
+    "content": "# Type declarations for a Vite app\n\nVite uses esbuild to transpile Typescript into Javascript and [esbuild does not do any type checking](https://esbuild.github.io/content-types/#typescript).\n\nTo generate type declarations, you can use `tsc`:\n\n```bash\ntsc --declaration --emitDeclarationOnly\n```\n\nIf you are building an application and want to check types only:\n\n```bash\ntsc --noEmit\n```\n\nExample `package.json`:\n\n```json\n{\n  \"name\": \"vite-app\",\n  \"version\": \"0.0.0\",\n  \"scripts\": {\n    \"build:types\": \"tsc --declaration --emitDeclarationOnly\"\n    \"check-types\": \"tsc --noEmit\"\n  },\n  \"devDependencies\": {\n    \"vite\": \"^2.7.2\",\n    \"typescript\": \"^4.0.3\"\n  }\n}\n```\n\nIt's nice to seperate the type checking from the build because:\n- Vite (esbuild) builds faster without it (by 20-30x).\n- It allows you to only generate type declarations when you need to (eg, preparing to package your app).",
+    "date": "2025-01-24",
+    "path": "type-declarations-for-a-vite-app.md",
+    "title": "Type declarations for a Vite app"
+  },
+  {
+    "content": "# User-defined type guard in TypeScript\n\nTypes can be narrowed down by using the `is` keyword:\n\n```ts\nconst isString = (value: unknown): value is string => {\n  return typeof value === 'string';\n}\n\nfunction myFunction(value: string | number) {\n  if (isString(value)) {\n    value\n    // ^? (parameter) value: string\n  } else {\n    value\n    // ^? (parameter) value: number\t\n  }\n}\n```\n\nWhen `isString` is called, TypeScript will narrow the type to `string` if the function returns `true`. TypeScript will also handle the `else` branch and narrows the type to `number` as it now knows that it is not a `string`.\n\nAnother example:\n\n```ts\ntype Color = 'red' | 'blue' | 'green';\n\nfunction isRed(color: string): color is 'red' {\n  return color === 'red'\n}\n\nfunction paint(color: Color) {\n  if (isRed(color)) {\n    color\n    // ^? (parameter) color: \"red\"\n  } else {\n    color\n    // ^? (parameter) color: \"blue\" | \"green\"\n  }\n}\n```\n\nIn the example above, `isRed` narrows `color` to `red` if the function returns true, otherwise the type is narrowed to `\"blue\" | \"green\"`.",
+    "date": "2025-01-24",
+    "path": "ts-user-defined-type-guard.md",
+    "title": "User-defined type guard in TypeScript"
+  },
+  {
+    "content": "# TypeScript Template Literal Types\n\nTypeScript has the ability to add string types using template literal strings:\n\n```ts\ntype EventType = \"Click\" | \"Change\";\ntype OnEventType = `on${EventType}`\n      // ^? type OnEventType = \"onClick\" | \"onChange\"\n```\n\nIt also returns every possible combination of the unions:\n\n```ts\n\ntype CssAttr = \"margin\" | \"padding\";\ntype Position = \"left\" | \"right\" | \"top\" | \"bottom\";\ntype CssKeys = `${CssAttr}-${Position}`\n         // ^? type CssKeys = \"margin-left\" \n         //                   | \"margin-right\" \n         //                   | \"margin-top\" \n         //                   | \"margin-bottom\" \n         //                   | \"padding-left\" \n         //                   | \"padding-right\" \n         //                   | \"padding-top\"\n         //                   | \"padding-bottom\"\n```\n\n\nCan be used on object keys:\n\n```ts\ntype Events = {\n  [key in `on${string}`]: () => void;\n}\n\nconst events: Events = {\n  onClick: () => {},\n  onChange: () => {}\n  // ^? ✅ (property) onChange: () => void\n  brokenFn: () => {}\n  // ^? ❌ Object literal may only specify known properties, and 'brokenFn' does not exist in type 'Events'\n}\n```\n\nCan be used with the other string manipulation types:\n\n```ts\ntype Action = 'query' | 'mutation';\n\ntype Hook = `use${Capitalize<Actions>}`;\n  // ^? type Hook = \"useQuery\" | \"useMutation\"\n```\n\nCan be used with generics:\n\n```ts\ntype EventType = \"click\" | \"change\";\n\ntype OnEventType<T extends string> = {\n  [key in T as `on${Capitalize<key>}`]: () => void\n}\n\nconst events: OnEventType<EventType> = {\n  onClick: () => {},\n  onChange: () => {},\n    // ^? ✅ (property) onChange: () => void\n  brokenFn: () => {}\n   // ^? ❌ Object literal may only specify known properties, and 'brokenFn' does not exist in type 'OnEventType<EventType>'\n}\n```\n\nThere is also a curated list of [Awesome Template Literal Types on GitHub](https://github.com/ghoullier/awesome-template-literal-types) that is worth checking out for more examples.",
+    "date": "2025-01-24",
+    "path": "ts-template-literal-types.md",
+    "title": "TypeScript Template Literal Types"
+  },
+  {
+    "content": "# TypeScript: Satisfies operator\n\nTypescript 4.9 introduced the new [satisfies](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#the-satisfies-operator) operator.\n\n[Steve](https://twitter.com/Steve8708/status/1605322303319199744) explains it best using this example:\n\n```tsx\ntype Route = { path: string; children?: Routes };\ntype Routes = Record<string, Route>;\n\nconst routes = {\n  AUTH: {\n    path: \"/auth\",\n    children: {\n      LOGIN: {\n        path: \"/login\",\n      },\n    },\n  },\n  HOME: {\n    path: \"/\",\n  },\n} satisfies Routes;\n\nroutes.AUTH.path; // works\nroutes.AUTH.children.LOGIN.path; // works\nroutes.HOME.children.LOGIN.path; // error\n//          ^? Property 'children' does not exist on type '{ path: string; }'.\n```\n\n[Matt Pocock](https://twitter.com/mattpocockuk) has a great example of a use-case in his [TypeScript 4.9 deep dive](https://www.youtube.com/watch?v=Danki1DyiuI&t=439s) video.",
+    "date": "2025-01-24",
+    "path": "ts-satisfies.md",
+    "title": "TypeScript: Satisfies operator"
+  },
+  {
+    "content": "# Inferring the types from a Remix loader\n\nThe `loader` function in [Remix](https://remix.run/) can be inferred automatically using:\n\n```tsx\ntype LoaderData = Awaited<ReturnType<typeof loader>>;\n```\n\n- `Awaited`: Extracts the value returned from a `Promise`.\n- `ReturnType`: Constructs a type consisting of the return type of a function.\n\nPutting it together:\n\n```tsx\nimport { json } from \"@remix-run/node\"; \n\ntype LoaderData = Awaited<ReturnType<typeof loader>>;\n// ^? LoaderData: Response\n\nexport const loader = async () => {\n  return json({ ok: true });\n};\n```",
+    "date": "2025-01-24",
+    "path": "ts-remix-infer-loader.md",
+    "title": "Inferring the types from a Remix loader"
+  },
+  {
+    "content": "# Array.prototype.reduce() can be typed in TypeScript\n\nThe return and initial value of the `reduce()` method can be typed using a generic.\n\nIn the example below, the array of products is converted to an object keyed by `productId`. This was safely typed with `ProductsById` being passed as a generic.\n\n```ts\nconst products = [\n  {\n    productId: '12345',\n    name: 'Product A'\n  },\n  {\n    productId: '67890',\n    name: 'Product B'\n  }\n];\n\ntype Product = { productId: string; name: string };\ntype ProductsById = Record<string, Product>;\n\n// Transforms the array `products` into an object keyed by `productId`\nconst productsById = products.reduce<ProductsById>(\n  (previousValue, currentValue) => {\n    return {\n      ...previousValue,\n      [currentValue.productId]: currentValue\n    };\n  },\n  {}\n);\n\nproductsById;\n// ^? const productsById: ProductsById\n```\n\nThe result of `productsById` returns the below object which matches the `ProductsById` type:\n\n```js\n{\n  \"12345\": {\n    \"productId\": \"12345\",\n    \"name\": \"Product A\"\n  },\n  \"67890\": {\n    \"productId\": \"67890\",\n    \"name\": \"Product B\"\n  }\n} \n```",
+    "date": "2025-01-24",
+    "path": "ts-reduce-generic-type.md",
+    "title": "Array.prototype.reduce() can be typed in TypeScript"
+  },
+  {
+    "content": "# TypeScript: ElementRef for React.useRef\n\nYou can extract the type from a `useRef` hook using `ElementRef`:\n\n```tsx\nimport { useRef, ElementRef } from \"react\";\n \nconst Component = () => {\n  const audioRef = useRef<ElementRef<\"audio\">>(null);\n//       ^? React.RefObject<HTMLAudioElement>\n\n  return <audio ref={audioRef}>Hello</audio>;\n};\n```\n\nRead [Matt Pocock's Strongly Type useRef with ElementRef](https://www.totaltypescript.com/strongly-type-useref-with-elementref).",
+    "date": "2025-01-24",
+    "path": "ts-react-elementref.md",
+    "title": "TypeScript: ElementRef for React.useRef"
+  },
+  {
+    "content": "# TypeScript: Type-only imports and exports\n\nTypeScript can enforce explicit type imports and exports using the [importsNotUsedAsValues](https://www.typescriptlang.org/tsconfig#importsNotUsedAsValues) configuration. \n\n```json\n{\n  \"compilerOptions\": {\n    \"importsNotUsedAsValues\": \"error\",\n  }\n}\n```\n\nSetting this to `error` will report an error if there is a type being imported without `import type` syntax.\n\n```ts\nimport type { MyType } from './types';\nexport type { MyType };\n```\n\nBundlers prefer this to help avoid potiential problems with types being incorrectly bundled.",
+    "date": "2025-01-24",
+    "path": "ts-imports-not-used-as-values.md",
+    "title": "TypeScript: Type-only imports and exports"
+  },
+  {
+    "content": "# Extending HTML Element Types in React 18\n\nReact 18 removed the `children` prop from `React.FC` and must be defined explicitly in your component's type.\n\nWhen creating new React components that extend HTML elements (eg Button), you will need to specify the `children` prop in React 18:\n\n```tsx\ntype ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {\n  children: React.ReactNode;\n};\n\nconst Button: React.FC<ButtonProps> = ({\n  children,\n  disabled,\n  name,\n  type,\n  value\n}) => {\n  return (\n    <button disabled={disabled} name={name} type={type} value={value}>\n      {children}\n    </button>\n  );\n};\n```",
+    "date": "2025-01-24",
+    "path": "ts-html-element-react-18.md",
+    "title": "Extending HTML Element Types in React 18"
+  },
+  {
+    "content": "# Overriding HTML Attributes in React TypeScript\n\nFirst extend the native HTML attributes:\n\n```ts\ninterface MyInputProps extends React.HTMLProps<HTMLInputElement> {\n  size: \"sm\" | \"md\" | \"lg\";\n}\n```\n\nA typescript will appear because TS knows that `HTMLInputElement` already has a `size` attribute and it does not match the one we added:\n\n```ts\ninterface MyInputProps extends React.HTMLProps<HTMLInputElement> {\n  size: \"sm\" | \"md\" | \"lg\";\n// ^? Type 'string' is not assignable to type 'number'\n}\n```\n\nWe need to omit the native `size` attribute:\n\n```ts\ninterface MyInputProps extends Omit<React.HTMLProps<HTMLInputElement>, 'size'> {\n  size: \"sm\" | \"md\" | \"lg\";\n}\n```\n\nAnd now we can type our new component. Spread the props so our new `size` prop is not set as the value to the native HTML attribute.\n\n```ts\nconst MyInput: React.FC<MyInputProps> = (props) => {\n  const { size, ...rest } = props;\n  return <input {...rest} className=\"my-input\" />;\n};\n```\n\nIf we want to continue using the native `size`, [Chakra UI](https://chakra-ui.com/docs/components/input/usage#changing-the-size-of-the-input) has a clever technique of using a new prop `htmlSize` that can be used instead:\n\n```ts\ninterface MyInputProps extends Omit<React.HTMLProps<HTMLInputElement>, 'size'> {\n  size: \"sm\" | \"md\" | \"lg\";\n  htmlSize?: number;\n}\n\nconst MyInput: React.FC<MyInputProps> = (props) => {\n  const { size, htmlSize, ...rest } = props;\n  return <input {...rest} size={htmlSize} className=\"my-input\" />;\n};\n```",
+    "date": "2025-01-24",
+    "path": "ts-html-attributes.md",
+    "title": "Overriding HTML Attributes in React TypeScript"
+  },
+  {
+    "content": "# TypeScript: @ts-expect-error\n\nTypeScript allows you to suppress errors on a line by using the `@ts-ignore` directive right before the erroring line:\n\n```ts\n// @ts-ignore\nconst myString: string = 1;\n```\n\nThe downside to using `@ts-ignore` is that there is no indication if it is really suppressing any errors unless the directive is removed. This can lead to forgotten `@ts-ignore` once the errors has been fixed.\n\nUsing `@ts-expect-error` will behave the same way but if there is no error in the code, TypeScript will report an error that the `@ts-expect-error` was not necessary:\n\n```ts\n// @ts-expect-error\nconst myString: string = 1;\n```\n\nThis is a great alternative to `@ts-ignore` if you intend to fix the code at a later stage. When the error is fixed, TypeScript will remind you to remove the directive.",
+    "date": "2025-01-24",
+    "path": "ts-expect-error.md",
+    "title": "TypeScript: @ts-expect-error"
+  },
+  {
+    "content": "# TypeScript: Exhaustiveness checking in switch with union type\n\nThe `never` data type in TypeScript can be used to check that all cases in a switch are considered.\n\n```ts\ntype Day =\n  | \"Monday\"\n  | \"Tuesday\"\n  | \"Wednesday\"\n  | \"Thursday\"\n  | \"Friday\"\n  | \"Saturday\"\n  | \"Sunday\";\n\nfunction getDayIndex(day: Day) {\n  switch (day) {\n    case \"Monday\": {\n      return 1;\n    }\n    default: {\n      // `Type 'string' is not assignable to type 'never'.`\n      const _exhaustiveCheck: never = day;\n      return _exhaustiveCheck;\n    }\n  }\n}\n```\n\n`_exhaustiveCheck` will have an error because TypeScript is attempting to assign the rest of the `Day` union to `never` which cannot happen.\n\nThis can be found in the [TypeScript documentation](https://www.typescriptlang.org/docs/handbook/2/narrowing.html?#exhaustiveness-checking).",
+    "date": "2025-01-24",
+    "path": "ts-exhaustive-switch.md",
+    "title": "TypeScript: Exhaustiveness checking in switch with union type"
+  },
+  {
+    "content": "# TypeScript Exact Types\n\nTypeScript will not show an error if additional keys are added to an object literal:\n\n```ts\ntype User = {\n  name: string;\n};\n\nconst userData = {\n  name: \"Peter\",\n  email: \"peter@email.com\",\n};\n\nfunction printUser(user: User) {\n  console.log(user);\n}\n\nprintUser({ name: \"Peter\", email: \"peter@email.com\" });\n// Error: Object literal may only specify known properties, and 'email' does not exist in type 'AllowedType'.\n\nprintUser(userData);\n// No error on this line\n```\n\nThis is because it is intentional. See [microsoft/TypeScript#12936](https://github.com/microsoft/TypeScript/issues/12936).\n\nA workaround is available on [https://stackoverflow.com/a/61960616](https://stackoverflow.com/a/61960616) by using a custom utility `Exact`:\n\n```tsx\ntype Exact<A, B> = A extends B ? (B extends A ? A : never) : never;\n\ntype User = {\n  name: string;\n};\n\nconst userData = {\n  name: \"Peter\",\n  email: \"peter@email.com\",\n};\n\nfunction printUser<T>(user: Exact<T, User>) {\n  console.log(user);\n}\n\nprintUser({ name: \"Peter\", email: \"peter@email.com\" });\n// Error: Object literal may only specify known properties, and 'email' does not exist in type 'AllowedType'.\n\nprintUser(userData);\n// Error: Argument of type '{ name: string; email: string; }' is not assignable to parameter of type 'never'\n```",
+    "date": "2025-01-24",
+    "path": "ts-exact-types.md",
+    "title": "TypeScript Exact Types"
+  },
+  {
+    "content": "# TypeScript: exactOptionalPropertyTypes\n\nTypeScript handles optional and undefined differently - [exactOptionalPropertyTypes](https://www.typescriptlang.org/tsconfig#exactOptionalPropertyTypes) will help catch scenarios where `undefined` should be typed explicitly.\n\nWhen turned off:\n\n```ts\ntype User = {\n  email?: string;\n}\n\nconst user: User = { email: undefined }\n// Valid\n```\n\nWhen turned on:\n\n```ts\ntype User = {\n  email?: string;\n}\n\nconst user: User = { email: undefined }\n    // Type '{ email: undefined; }' is not assignable to type 'User' with 'exactOptionalPropertyTypes: true'.\n    // Consider adding 'undefined' to the types of the target's properties.\n```\n\nRead [optional vs undefined | TkDodo's blog](https://tkdodo.eu/blog/optional-vs-undefined) to learn the difference and how this can help.",
+    "date": "2025-01-24",
+    "path": "ts-exact-optional-property-types.md",
+    "title": "TypeScript: exactOptionalPropertyTypes"
+  },
+  {
+    "content": "# TypeScript Config: noUnCheckedIndexAccess\n\n`noUnCheckedIndexAccess` adds `undefined` to any un-declared fields in a type. This is useful if you have an index signature and want to check if a property exists before accessing it.\n\nTake this example:\n\n```ts\nconst myObject: Record<string, string[]> = {};\n\nmyObject[\"myKey\"].push(\"myString\");\n```\n\nThis satisfies TypeScript because `myKey` is typed as `string` in the index signature of `myObject`. What we do not know yet is if `myObject[\"myKey\"]` is defined for us to use.\n\nWith `noUnCheckedIndexAccess` enabled, TypeScript will warn us that the object is possibly `undefined` and that we should check it exists:\n\n```ts\nconst myObject: Record<string, string[]> = {};\n\nif (myObject[\"myKey\"]) {\n  myObject[\"myKey\"].push(\"myString\");\n}\n```",
+    "date": "2025-01-24",
+    "path": "ts-config-no-unchecked-index-access.md",
+    "title": "TypeScript Config: noUnCheckedIndexAccess"
+  },
+  {
+    "content": "# TypeScript: Callable interface\n\nAdding an interface for callable objects:\n\n```tsx\ninterface Callable {\n  (): string;\n}\n\nconst myCallable: Callable = function () {\n  return \"I was called\";\n};\n\nconst myFunction = myCallable;\nconst value = myFunction();\n    // ^? const value: string\n```\n\nAnother example with parameters:\n\n```tsx\ninterface Callable {\n  (numOne: number, numTwo: number): number;\n}\n\nconst addNumbers: Callable = function (numOne, numTwo) {\n  return numOne + numTwo;\n};\n\nconst myFunction = addNumbers;\nconst value = myFunction(1, 2);\n    // ^? const value: number\n```",
+    "date": "2025-01-24",
+    "path": "ts-callable.md",
+    "title": "TypeScript: Callable interface"
+  },
+  {
+    "content": "# TypeScript Assertion Functions\n\nAssertion functions throw an error if a certain condition is not met. \n\n```ts\nassert(name === \"Peter\");\n```\n\nThe assertion function will throw an error `name` is not \"Peter\". \n\n## Assertion Signatures\n\nWith assertion functions, there is \"assertion signatures\" which are used to narrow the type of values to be more specific.\n\nConsider the below example: We are not sure of the type of `maybeNumber`. We can assert it is a number before continuing with the code flow. \n\n```ts\nfunction assert(condition: unknown): asserts condition {\n  if (!condition) {\n    throw new Error(\"Assertion failed.\");\n  }\n}\n\nlet maybeNumber: any;\nassert(typeof maybeNumber === \"number\");\n\nmaybeNumber;\n  // ^? let maybeNumber: number\n```\n\nWe now know that `maybeNumber` is a number because the assertion did not fail, so TypeScript narrowed the type down to `number.\n\nWe can be more specific with the condition. Below example has an assertion signature `asserts value is number`:\n\n```ts\nfunction assertIsNumber(value: unknown): asserts value is number {\n  if (typeof value !== \"number\") {\n    throw new Error(\"Not a number\");\n  }\n}\n\nlet maybeNumber: any;\nassert(typeof maybeNumber === \"number\");\n\nmaybeNumber;\n  // ^? let maybeNumber: number\n```\n\n## Putting it together\n\nWe can also include a custom message to be used as the error message when the assertion fails:\n\n```ts\nfunction assert(condition: unknown, message?: string): asserts condition {\n  if (!condition) {\n    throw new Error(message || 'Assertion failed.');\n  }\n}\n\nlet myVariable: { myKey: string } | undefined;\n\nmyVariable.myKey;\n // ^? 'myVariable' is possibly 'undefined'.\n\nassert(myVariable, \"myVariable is undefined\");\n\nmyVariable\n // ^? let myVariable: { myKey: string } \n```",
+    "date": "2025-01-24",
+    "path": "ts-assertion-functions.md",
+    "title": "TypeScript Assertion Functions"
+  },
+  {
+    "content": "# TypeScript narrow Array.includes()\n\nA common problem faced with using `Array.includes()` in TypeScript:\n\n```tsx\nconst environments = [\"DEV\", \"UAT\", \"PROD\"] as const;\n\nfunction isSupported(env: string) {\n  if (environments.includes(env)) {\n    // Error: Argument of type 'string' is not \n    // assignable to parameter of type '\"DEV\" | \"UAT\" | \"PROD\"'.\n  }\n}\n```\n\nThe definition of `Array.includes()`:\n\n```tsx\ninterface Array<T> {\n  includes(searchElement: T, fromIndex?: number): boolean;\n}\n```\n\nThe function wants both the searchElement and the array to be of the same type.\n\nThis can be solved by narrowing the type using a helper function:\n\n```tsx\nfunction includes<T extends U, U>(arr: ReadonlyArray<T>, searchElement: U): searchElement is T {\n  return arr.includes(searchElement as T);\n}\n```\n\n- Takes in array of type `ReadonlyArray<T>` and search for element of type `U`.\n- `T extends U`: T is a subset of U.\n- If condition is true, we narrow using `searchElement is T`.\n\n```tsx\nfunction isSupported(env: string) {\n  if (includes(environments, env)) {\n    console.log(env);\n              // ^? env: \"DEV\" | \"UAT\" | \"PROD\"\n  }\n}\n```",
+    "date": "2025-01-24",
+    "path": "ts-array-includes.md",
+    "title": "TypeScript narrow Array.includes()"
+  },
+  {
+    "content": "# The Idiomatic Text element\n\nThe HTML `i` element is named [the Idiomatic Text element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/i) on [MDN Web Docs](https://developer.mozilla.org/en-US/docs/).\n\nThe [HTML specifications](https://html.spec.whatwg.org/multipage/text-level-semantics.html#the-i-element) defines the `i` element as:\n\n> The `i` element represents a span of text in an alternate voice or mood, or otherwise offset from the normal prose in a manner indicating a different quality of text, such as a taxonomic designation, a technical term, an idiomatic phrase from another language, transliteration, a thought, or a ship name in Western texts.\n\nHistorically, the `i` element was used for presentation and browsers display it in italics. However, even though some browsers continue to display it in italics as a fallback, the `i` element should not be used for presentational purposes as it does not necessarily mean the text will be in italics.  \n\nThe `i` element has semantic meaning and the usage depends on the situation and the surrounding text. [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/em#i_vs._em) has a great example:\n\n> An example for `<i>` could be: \"The _Queen Mary_ sailed last night\". Here, there is no added emphasis or importance on the word \"Queen Mary\". It is merely indicated that the object in question is not a queen named Mary, but a ship named _Queen Mary_. ",
+    "date": "2025-01-24",
+    "path": "the-idiomatic-text-element.md",
+    "title": "The Idiomatic Text element"
+  },
+  {
+    "content": "# The Details disclosure element\n\nThe `<details>` HTML element creates an accordion-like element that the user can toggle open and close.\n\nThe [W3C HTML specification](http://www.w3.org/html/wg/drafts/html/master/interactive-elements.html#the-details-element) describes the element:\n\n> The details element represents a disclosure widget from which the user can obtain additional information or controls.\n\n## Usage\n\n```html\n<details>\n  <summary>Show/Hide</summary>\n  <p>Today I learnt about the `details` element</p>\n</details>\n```\n\nThe `open` attribute is a boolean that can be used to indicate if the content is visible or not.\n\n```html\n<details open=\"true\">\n  <summary>Show/Hide</summary>\n  <p>Today I learnt about the `details` element</p>\n</details>\n```",
+    "date": "2025-01-24",
+    "path": "the-details-element.md",
+    "title": "The Details disclosure element"
+  },
+  {
+    "content": "# Using the `tar` command\n\n## Create a compressed tar archive\n\n```bash\n$ tar -czvf archive.tar.gz ./directory\n```\n\n- `-c`: Create archive.\n- `-z`: Compress using `gzip` algorithm.\n- `-f`: Specify filename of archive.\n- `-v`: Verbose (show progress).\n\n## Uncompress a tar archive\n\n```bash\n$ tar -xvf archive.tar.gz\n```\n\n- `-x`: Extract from archive.\n- `-f`: Specify filename of archive.\n- `-v`: Verbose (show progress).\n\n## Extract tar archive to a different directory\n\n```bash\n$ tar -xvf archive.tar.gz -C ./another-directory\n```\n\n- `-C`: Changes the directory.\n\n## Extract specific files from tar archive\n\n```bash\n$ tar -xvf archive.tar.gz file1 file2 file3\n```\n\n## Extract specific files from tar archive using wildcard\n\n```bash\n$ tar -xvf archive.tar.gz --wildcards '*.js'\n```\n\n## List the content of tar archive\n\n```bash\n$ tar -tf archive.tar.gz\n```\n\n- `-t`: List the content.",
+    "date": "2025-01-24",
+    "path": "tar-archive.md",
+    "title": "Using the `tar` command"
+  },
+  {
+    "content": "# SvelteKit Sync\n\n`svelte-kit sync` creates the tsconfig.json and all generated types for your project. This is useful because Sveltekit has [generated types](https://kit.svelte.dev/docs/types#generated-types).\n\nExample:\n\n```tsx\nimport { API_KEY } from '$env/static/private';\n// ^? Module '\"$env/static/private\"' has no exported member 'API_KEY'.\n```\n\nRunning `svelte-kit sync` will generate the correct types and remove the error:\n\n```tsx\nimport { API_KEY } from '$env/static/private';\n// ^? (alias) const API_KEY: string\n```\n\nYou'll find the generated types under the `.svelte-kit` folder. Here is the one for environment variables:\n\n```tsx\n// .svelte-kit/ambient.d.ts\ndeclare module '$env/static/private' {\n\texport const API_KEY: string;\n  ...\n}\n```",
+    "date": "2025-01-24",
+    "path": "sveltekit-sync.md",
+    "title": "SvelteKit Sync"
+  },
+  {
+    "content": "# Svelte components have file location meta data\n\nSvelte nodes have a `__svelte_meta` object in development mode that contains the file location of the component that rendered that node. \n\n```json\n{\n\t\"loc\": {\n\t\t\"file\": \"src/routes/index.svelte\",\n\t\t\"line\": 18,\n\t\t\"column\": 4,\n\t\t\"char\": 358\n\t}\n}\n```\n\nYou an try it out on [StackBlitz](https://node.new/sveltekit). Inspect an element using the Chrome Dev Tools and use the console:\n\n```js\n$0.__svelte_meta\n```\n\n<img width=\"1095\" alt=\"Screenshot 2022-05-07 at 9 25 47 AM\" src=\"https://user-images.githubusercontent.com/4616064/167232485-a712022b-b799-441a-a052-70f2a5ff9633.png\">\n\n\n(`$0` [references the last selected DOM element](https://developer.chrome.com/docs/devtools/console/utilities/#recent-many). It is part of the DevTool's Console API)\n\nLearn more about `__svelte_meta`:\n\n- https://github.com/sveltejs/svelte/pull/1501\n- https://github.com/sveltejs/svelte/issues/1499",
+    "date": "2025-01-24",
+    "path": "svelte-components-have-file-location-meta-data.md",
+    "title": "Svelte components have file location meta data"
+  },
+  {
+    "content": "# Deep clone object with structuredClone()\n\n[structuredClone()](https://developer.mozilla.org/en-US/docs/Web/API/structuredClone) is a native API in JavaScript that can do deep cloning of objects:\n\n```js\n\nconst original = {\n  name: \"Peter\",\n  properties: {\n    age: new Date()\n  }\n};\n\nconst copy = structuredClone(original);\n\ncopy.properties.action = \"Jump\";\noriginal.properties.action; // undefined\n```\n\nIt can handle circular references and other JS built-in types such as `Date`, `Set`, `Map`.\n\nLearn more on [MDN](https://developer.mozilla.org/en-US/docs/Web/API/structuredClone).\n\n## What about object spread?\n\nThe object spread operator actually does a shallow copy. If you modify a deeply nested property, both objects are affected:\n\n```js\nconst original = {\n  name: \"Peter\",\n  properties: {\n    age: new Date()\n  }\n};\n\nconst copy = { ...original };\n\ncopy.properties.action = \"Jump\";\noriginal.properties.action; // \"Jump\"\n```",
+    "date": "2025-01-24",
+    "path": "structured-clone.md",
+    "title": "Deep clone object with structuredClone()"
+  },
+  {
+    "content": "# Spaces vs tabs: It's an accessibility issue\n\nI never got involved in spaces vs tabs debates throughout my career. But the topic has popped up recently and I took notice of something that I have missed for many years: spaces have been an accessibility issue for many developers. For the visually impaired, spaces are hard to read. Tabs give developers the control and flexibility of the spacing to suit their needs.\n\n## Good reads\n\n- [Rich Harris](https://github.com/Rich-Harris) pushed for GitHub to change their tab width size in [PR #170](https://github.com/isaacs/github/issues/170).\n- [Prettier](https://prettier.io/) is considering making tabs the default in 3.0. Mentioned in [Issue #7475](https://github.com/prettier/prettier/issues/7475).\n- [MarcoSehe](https://github.com/MarcoZehe) comments on [PR #170](https://github.com/prettier/prettier/issues/7475#issuecomment-668544890) the impact that spaces have on Braille displays.\n- [Nobody talks about the real reason to use Tabs over Spaces](https://www.reddit.com/r/javascript/comments/c8drjo/nobody_talks_about_the_real_reason_to_use_tabs/)\n\n## What I learned\n\n- Developers who are visually impaired can change the tab width to a size that is comfortable on their eyes.\n- If you prefer spaces, you can set the tab width to `2`.\n- You can change the tab width in GitHub by using the `?ts=` query.\n- You can change the tab size in GitHub globally in the [Appearance](https://github.com/settings/appearance) settings page.",
+    "date": "2025-01-24",
+    "path": "spaces-vs-tabs.md",
+    "title": "Spaces vs tabs: It's an accessibility issue"
+  },
+  {
+    "content": "# Microfrontend using single-spa\n\n[single-spa](https://single-spa.js.org/) is a JavaScript framework that enables you to develop applications using multiple frontend frameworks.\n\nComponents involved in single-spa:\n\n- **root-config**: Entry point for the microfrontend application. It registers the applications and configures the router rules to decide which application should be rendered for each specific route.\n- **application**: Self-contained application developed using any front-end application. They are packaged as modules. \n- **parcel**: Sharable UI components used across applications of different frameworks.\n- **utility**: Modules of common logic such as data fetching, error tracking, component libraries.",
+    "date": "2025-01-24",
+    "path": "single-spa.md",
+    "title": "Microfrontend using single-spa"
+  },
+  {
+    "content": "# setTimeout(): Node.js vs Web\n\n- In Node.js, [setTimeout()](https://nodejs.org/dist/latest-v18.x/docs/api/timers.html#settimeoutcallback-delay-args) returns a [\\<Timeout\\>](https://nodejs.org/dist/latest-v18.x/docs/api/timers.html#class-timeout) object.\n- In web, [setTimeout()](https://developer.mozilla.org/en-US/docs/Web/API/setTimeout) returns a number (`timeoutID`).\n\nBoth return values are passed to `clearTimeout()` to cancel the timeout.",
+    "date": "2025-01-24",
+    "path": "settimeout-node-vs-web.md",
+    "title": "setTimeout(): Node.js vs Web"
+  },
+  {
+    "content": "# Implementing a custom RTK Query baseQuery\n\nIn RTK Query, services are created like this example:\n\n```tsx\nexport const myApi = createApi({\n  reducerPath: 'myApi',\n  baseQuery: fetchBaseQuery({ baseUrl: '/api' }),\n  endpoints: (builder) => ({\n    getUserById: builder.query({\n      query: (id) => `user/${id}`,\n    }),\n  }),\n})\n```\n\nThe `baseQuery` can be a custom utility that can wrap the default `fetchBaseQuery`. \n\nBelow is use-case that provides meta along with each request:\n\n```tsx\nconst myBaseQuery = async (args, api, extraOptions) => {\n  const requestId = uuid();\n\n  const baseResult = await fetchBaseQuery({ baseUrl: \"/api\" })(\n    args,\n    api,\n    extraOptions\n  );\n  \n  return {\n    ...baseResult,\n    meta: baseResult.meta && { ...baseResult.meta, requestId },\n  };\n};\n\nexport const myApi = createApi({\n  reducerPath: \"myApi\",\n  baseQuery: myBaseQuery,\n  endpoints: (builder) => ({\n    getUserById: builder.query({\n      query: (id) => `user/${id}`,\n    }),\n  }),\n});\n```\n\n`baseResult` can return an `error` if an error occured and we can use that to track which endpoint had an error. `api` parameter has an `endpoint` value that has the name of the endpoint (eg `getUserById` from the above example).\n\n\n```tsx\nconst baseResult = await fetchBaseQuery({ baseUrl: \"/api\" })(\n  args,\n  api,\n  extraOptions\n);\n\nif (baseResult.error) {\n  const error = baseResult.error;\n  if (\"status\" in error) {\n    const errMsg = \"error\" in error ? error.error : JSON.stringify(error.data);\n\n    console.error(`Error with ${api.endpoint}: ${error}`);\n  }\n}\n```",
+    "date": "2025-01-24",
+    "path": "rtk-query-base-query.md",
+    "title": "Implementing a custom RTK Query baseQuery"
+  },
+  {
+    "content": "# Rename an AWS Lightsail instance\n\nAWS Lightsail does not have an option to rename instances. However, you can create a new instance from a snapshot and give it the desired name. \n\n## Create a snapshot of the existing instance\n\n1. From the Lightsail homepage, click on the name of the instance for which you want to rename.\n2. Click on the **Snapshots** tab.\n3. **Create snapshot** under the **Manual snapshots** section.\n\n## Create new instance from the new snapshot\n\n1. Choose the actions menu icon (⋮) next to the newly created manual snapshot.\n2. Select **Create new instance**.\n3. On the next page, enter the correct name.\n\n## Attach existing static IP to the new instance\n\nAfter verifying the new instance is running as expected, you may now re-attach the existing static IP.\n\n1. From the Lightsail homepage, click on the name of the instance that is no longer needed.\n2. **Stop** the instance.\n3. Click on **Networking** tab.\n4. **Detach** the static IP.\n5. From the Lightsail homepage, select the newly created instance.\n6. Click on **Networking** tab.\n7. **Attach** the static IP to the new instance.",
+    "date": "2025-01-24",
+    "path": "rename-aws-lightsail-instance.md",
+    "title": "Rename an AWS Lightsail instance"
+  },
+  {
+    "content": "# Remove React app from the DOM\n\nUse [ReactDOM.unmountComponentAtNode()](https://beta.reactjs.org/reference/react-dom/unmountComponentAtNode#unmountcomponentatnode) (React < 18) or [root.unmount()](https://beta.reactjs.org/reference/react-dom/client/createRoot#root-unmount) to remove a React app from the DOM.\n\n```js\nimport ReactDOM from 'react-dom';\n\nconst domNode = document.getElementById('root');\nReactDOM.render(<App />, domNode);\n\nReactDOM.unmountComponentAtNode(domNode);\n```\n\n```js\nimport { createRoot } from 'react-dom/client';\n\nconst domNode = document.getElementById('root');\nconst root = createRoot(domNode);\n\nroot.render(<App />);\n\nroot.unmount();\n```",
+    "date": "2025-01-24",
+    "path": "react-unmount-component-at-node.md",
+    "title": "Remove React app from the DOM"
+  },
+  {
+    "content": "# Proxying using Netlify Redirects\n\n[Netlify Redirects](https://docs.netlify.com/routing/redirects/) can be used to proxy to external services.\n\nIn the below example, requests to `/api` are proxied to `https://api.domain.com`:\n\n```bash\n/api/*  https://api.example.com/:splat  200\n```\n\nHere is an example that proxies a JS script to another location:\n\n```bash\n/js/script.js https://domain.com/tracker.js 200\n```\n\nHere is an example that combines the two examples above and this one is very useful for analytics tools:\n\n```bash\n/api https://tracking-tool.com/api  200\n/js/script.js https://tracking-tool.com/tracker.js 200\n```\n\nThis example is useful because it can:\n- Bypass CORS because the requests are from the same origin.\n- Bypass blockers because the URLs don't have tracker-like keywords.",
+    "date": "2025-01-24",
+    "path": "proxying-using-netlify-redirects.md",
+    "title": "Proxying using Netlify Redirects"
+  },
+  {
+    "content": "  # Automatically handle `updated_at` column\n\n> **[moddatetime()](https://www.postgresql.org/docs/current/static/contrib-spi.html)** is a trigger that stores the current time into a timestamp field. This can be useful for tracking the last modification time of a particular row within a table.\n>\n> To use, create a BEFORE UPDATE trigger using this function. Specify a single trigger argument: the name of the column to be modified. The column must be of type timestamp or timestamp with time zone.\n\n  ```sql\ncreate extension if not exists moddatetime schema extensions;\n\n-- assuming the table name is \"todos\", and a timestamp column \"updated_at\"\n-- this trigger will set the \"updated_at\" column to the current timestamp for every update\ncreate trigger handle_updated_at before update on todos\n  for each row execute procedure moddatetime (updated_at);\n```",
+    "date": "2025-01-24",
+    "path": "postgresql-moddatetime.md",
+    "title": "  Automatically handle `updated_at` column"
+  },
+  {
+    "content": "# Use pnpm's shell-emulator to execute scripts on all platforms\n\n[pnpm](https://pnpm.io/) can do cross-platform scripting when [shell-emulator](https://pnpm.io/cli/run#shell-emulator) is enabled.\n\n```bash\n# .npmrc\nshell-emulator=true\n```\n\nIt means scripts like this will work across all platforms:\n\n```js\n\"scripts\": {\n  \"serve\": \"NODE_ENV=production node server\"\n}\n```\n\nIt is powered by [@yarnpkg/shell](https://github.com/yarnpkg/berry/tree/master/packages/yarnpkg-shell) and it replaces the need to use libraries like `cross-env`.\n\n## Learn More\n- [shell-emulator](https://pnpm.io/cli/run#shell-emulator)\n- [pnpm/pnpm#2881](https://github.com/pnpm/pnpm/pull/2881)\n- [@pnpm/npm-lifecycle](https://github.com/pnpm/npm-lifecycle/commit/4b1a3db1f36a44a49fe7e2dd52c0099124ebdba4)",
+    "date": "2025-01-24",
+    "path": "pnpm-shell-emulator.md",
+    "title": "Use pnpm's shell-emulator to execute scripts on all platforms"
+  },
+  {
+    "content": "# Make changes to a dependency using pnpm patch\n\n[pnpm patch](https://pnpm.io/cli/patch) allows you to make changes to a dependency package without having to wait for the package maintainers to release the changes.\n\nIt first extracts the package into a temporarily directory and asks you to make the changes.\n\n```bash\n$ pnpm patch my-pkg@1.0.0\nYou can now edit the following folder: /tmp/5ea276f0eeb3585ea64ddf4b3b7ef377\n```\n\nOnce you've made the changes, you patch up the changes using [pnpm patch-commit](https://pnpm.io/cli/patch-commit):\n\n```bash\n$ pnpm patch-commit /tmp/5ea276f0eeb3585ea64ddf4b3b7ef377\n```\n\nThis will create a patchfile in your project and pnpm will use this each time you do an `pnpm install`.\n\npnpm will reference patches in package.json:\n\n```json\n\"pnpm\": {\n  \"patchedDependencies\": {\n    \"my-pkg@1.0.0\": \"patches/my-pkg@1.0.0.patch\"\n  }\n}\n```",
+    "date": "2025-01-24",
+    "path": "pnpm-patch.md",
+    "title": "Make changes to a dependency using pnpm patch"
+  },
+  {
+    "content": "# Today I Learned: PHP\n\nI had the opportunity to work on some PHP this week and picked up a few new tricks that are very different from JavaScript:\n\n## Computing the difference in arrays\n\n```php\n$array1 = array(\"a\" => \"green\", \"red\", \"blue\", \"red\");\n$array2 = array(\"b\" => \"green\", \"yellow\", \"red\");\n\n$result = array_diff($array1, $array2);\n```\n\n## Computing the intersection of arrays\n\n```php\n$array1 = array(\"a\" => \"green\", \"red\", \"blue\");\n$array2 = array(\"b\" => \"green\", \"yellow\", \"red\");\n\n$result = array_intersect($array1, $array2);\n```\n\n## Inherit a variable inside an anonymous function\n\n```php\n$message = 'world';\n$example = function () use ($message) {\n    return \"hello $message\";\n};\n```\n\n## Reference a private function as a callback\n\n```php\nclass MyClass {\n\n    public static function getDifference() {\n        $array1 = array(\"a\" => \"green\", \"red\", \"blue\");\n        $array2 = array(\"b\" => \"green\", \"yellow\", \"red\");\n\n        $result = array_udiff($array1, $array2, array($this, 'filterById'));    \n    }\n\n    private function filterById($a, $b) {}\n}\n```\n\n## Reference static members of a class using `self`\n\n```php\nclass MyClass {\n    public static $url = \"https://petermekhaeil.com/\";\n\n    public static function getUrl() {\n        return self::$url;\n    }\n}\n```",
+    "date": "2025-01-24",
+    "path": "php.md",
+    "title": "Today I Learned: PHP"
+  },
+  {
+    "content": "# Using Nunjucks Macros in Eleventy\n\nNunjucks macros allows you to define reusable UI components that can be imported in your Eleventy pages when using the Nunjucks templating language:\n\n```\n{%- macro button(params) -%}\n  <button type=\"{{ params.type }}\">{{ params.text }}</button>\n{%- endmacro -%}\n```\n\nImporting the macro in your page by referencing the filename and the macro name:\n\n```\n{%- from \"button.macro.njk\" import button -%}\n\n{{ button({ type: \"button\", text: \"Click Me\" }) }}\n```",
+    "date": "2025-01-24",
+    "path": "nunjucks-macro-eleventy.md",
+    "title": "Using Nunjucks Macros in Eleventy"
+  },
+  {
+    "content": "# Null is a billion-dollar mistake\n\nIn 2009, Tony Hoare describes his invention as a \"billion-dollar mistake\":\n\n> I call it my billion-dollar mistake. It was the invention of the null reference in 1965. At that time, I was designing the first comprehensive type system for references in an object oriented language (ALGOL W). My goal was to ensure that all use of references should be absolutely safe, with checking performed automatically by the compiler. But I couldn't resist the temptation to put in a null reference, simply because it was so easy to implement. This has led to innumerable errors, vulnerabilities, and system crashes, which have probably caused a billion dollars of pain and damage in the last forty years.\n\n## Reading\n\n- https://www.infoq.com/presentations/Null-References-The-Billion-Dollar-Mistake-Tony-Hoare/\n- https://en.wikipedia.org/wiki/Null_pointer\n- https://en.wikipedia.org/wiki/Tony_Hoare\n- https://maximilianocontieri.com/null-the-billion-dollar-mistake",
+    "date": "2025-01-24",
+    "path": "null-billion-dollar-mistake.md",
+    "title": "Null is a billion-dollar mistake"
+  },
+  {
+    "content": "# Show data about an npm package using npm view\n \n[npm view](https://docs.npmjs.com/cli/v7/commands/npm-view/) outputs data about an npm package:\n \n\n```bash\n $ npm view zod\n```\n \nOutput:\n \n```bash\nzod@3.20.6 | MIT | deps: none | versions: 254\nTypeScript-first schema declaration and validation library with static type inference\nhttps://zod.dev\n\nkeywords: typescript, schema, validation, type, inference\n\ndist\n.tarball: https://registry.npmjs.org/zod/-/zod-3.20.6.tgz\n.shasum: 2f2f08ff81291d47d99e86140fedb4e0db08361a\n.integrity: sha512-oyu0m54SGCtzh6EClBVqDDlAYRz4jrVtKwQ7ZnsEmMI9HnzuZFj8QFwAY1M5uniIYACdGvv0PBWPF2kO0aNofA==\n.unpackedSize: 567.1 kB\n\nmaintainers:\n- colinmcd94 <colin@colinhacks.com>\n- vriad <colin@vriad.com>\n\ndist-tags:\nalpha: 3.0.0-alpha.29  beta: 3.20.4-beta.0    canary: 1.10.2-canary  latest: 3.20.6         next: 3.8.2-alpha.6    \n\npublished 4 days ago by colinmcd94 <colin@colinhacks.com>\n```",
+    "date": "2025-01-24",
+    "path": "npm-view.md",
+    "title": "Show data about an npm package using npm view"
+  },
+  {
+    "content": " # npm using latest version of package\n \n If you want to use the latest version of a package when using `npm create`, you need to specify `latest` as the package version.\n  \n It's why most tools will have instructions like below. It's to force npm to install the latest version of the package:\n \n ```bash\n$ npx create-remix@latest\n$ npm create svelte@latest\n$ npx create-next-app@latest\n```\n\nThe above will fetch the latest versions from the registry and execute the script.\n\nIf you do not specify a version and have previously installed the package, npm will use that previously installed version.\n\nThe same goes with the other npm commands like `npm init`, `npm exec`, `npx`.",
+    "date": "2025-01-24",
+    "path": "npm-latest.md",
+    "title": " npm using latest version of package"
+  },
+  {
+    "content": "# npm disable audit in .npmrc\n\nnpm can get noisy during installs with the [audit](https://docs.npmjs.com/cli/v6/commands/npm-audit) report:\n\n```bash\n1 vulnerabilities (0 moderate, 1 high)\n\nTo address issues that do not require attention, run:\n  npm audit fix\n\nTo address all issues (including breaking changes), run:\n  npm audit fix --force\n```\n\n[Dan Abramov](https://twitter.com/dan_abramov) has a great write-up on why [npm audit is broken by design](https://overreacted.io/npm-audit-broken-by-design/) - it is worth the read.\n\nYou can disable the audit for all npm commands using `.npmrc`:\n\n```ini\naudit=false\nloglevel=silent\n```",
+    "date": "2025-01-24",
+    "path": "npm-audit.md",
+    "title": "npm disable audit in .npmrc"
+  },
+  {
+    "content": "# Accessing stdin with file descriptor 0\n\nIn Node.js, you can access `stdin` using file descriptor 0 to take input stream:\n\n```js\nconst fs = require(\"fs\");\nconst data = fs.readFileSync(0, \"utf-8\");\n```\n\nThis can be used on the Node.js CLI:\n\n```bash\necho Peter Mekhaeil | node -p \"fs.readFileSync(0, 'utf8').toLowerCase().replaceAll(' ','-')\"\n```",
+    "date": "2025-01-24",
+    "path": "node-file-descriptor-0.md",
+    "title": "Accessing stdin with file descriptor 0"
+  },
+  {
+    "content": "# Nginx Nested Locations\n\nNginx supports nested locations:\n\n```\nserver {\n  location /app {\n    location /app/assets {\n      # ...\n    }\n    \n    location /app/pages {\n      # ...\n    }\n  }\n}\n```\n\nNote that nested locations are not relative to the parent location. \n\nIn the above example:\n- `location /app` parent location block that matches requests starting with `/app`.\n- `location/app/assets` nested location that matches `/app/assets`.\n- `location/app/pages` nested location that matches `/app/pages`.",
+    "date": "2025-01-24",
+    "path": "nginx-nested-locations.md",
+    "title": "Nginx Nested Locations"
+  },
+  {
+    "content": "# Next.js statically typed links\n\n[Next.js](https://beta.nextjs.org/docs/configuring/typescript#statically-typed-links) statically types links to avoid errors when using `next/link`. The type declarations are generated by the dev/build process and includes information of all valid routes in the application.\n\n```tsx\nimport type { Route } from 'next';\nimport Link from 'next/link'\n\n// ✅\n<Link href=\"/about\" />\n// ✅\n<Link href=\"/blog/nextjs\" />\n// ✅\n<Link href={`/blog/${slug}`} />\n// ✅\n<Link href={('/blog' + slug) as Route} />\n\n// ❌ TypeScript errors if href is not a valid route\n<Link href=\"/aboot\" />\n```",
+    "date": "2025-01-24",
+    "path": "nextjs-type-safe-link.md",
+    "title": "Next.js statically typed links"
+  },
+  {
+    "content": "# Netlify Node.js Version\n\nNetlify uses `nvm` in their build images. Set the Node.js version in `.npmrc` to tell Netlify which version you want to use. Netlify will also cache the downloaded version as a dependency to speed up subsequent builds.\n\nUsing the `.npmrc` approach also lets other developers know what version of Node.js is required.",
+    "date": "2025-01-24",
+    "path": "netlify-node-version.md",
+    "title": "Netlify Node.js Version"
+  },
+  {
+    "content": "# Module Federation\n\nModule Federation is a microfrontend pattern that involves 2 components:\n\n## Remote\n\n- Remote apps expose modules for other microfrontends apps to import. \n- Remote apps are compiled and deployed independently. \n- Remote apps expose an entry file that contains the exposed modules.\n\n## Host\n\n- Host app consumes modules exposed from remote apps. \n- The host app owns a module registry that maps the module names with the remote location. \n- The remote modules are imported dynamically on-demand when requested. \n\nBoth [Webpack](https://webpack.js.org/concepts/module-federation/) and [Vite](https://github.com/originjs/vite-plugin-federation) support Module Federation.",
+    "date": "2025-01-24",
+    "path": "module-federation.md",
+    "title": "Module Federation"
+  },
+  {
+    "content": "# Recursively delete .DS_Store\n\nDelete all `.DS_Store` found within a directory recursively:\n\n```bash\nfind . -name '.DS_Store' -type f -delete -print\n```\n\n`-print` will also print the path of the file when deleting.",
+    "date": "2025-01-24",
+    "path": "mac-delete-ds-store.md",
+    "title": "Recursively delete .DS_Store"
+  },
+  {
+    "content": "# Logging variables in Chrome DevTools using logpoints\n\n`logpoints` in Chrome DevTools allow you insert logging statements without adding breakpoints.\n\nRight-click on the line you want to log:\n\n![Screenshot 2022-05-24 at 9 19 45 PM](https://user-images.githubusercontent.com/4616064/170044768-23b8fc0e-7f97-4452-9089-0be65fd2a0c2.png)\n\nAdd the statement you would like to output to the console:\n\n![Screenshot 2022-05-24 at 9 23 58 PM](https://user-images.githubusercontent.com/4616064/170045738-4ea2c14f-70b4-4e59-a907-f82487e610f6.png)\n\nEverytime the code runs on this `logpoint`, it will output to the console:\n\n![Screenshot 2022-05-24 at 9 27 54 PM](https://user-images.githubusercontent.com/4616064/170046595-7a2309f2-5733-49ec-9ba0-7e989c01eb6a.png)\n\nThis allows for quick console logging without having you to touch your source code and without having to add breakpoints.",
+    "date": "2025-01-24",
+    "path": "logging-variables-in-chrome-devtools.md",
+    "title": "Logging variables in Chrome DevTools using logpoints"
+  },
+  {
+    "content": "# JSON.stringify replacer parameter\n\n`JSON.stringify` has an optional second parameter [replacer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#the_replacer_parameter) that can recursively transform properties during the stringify process. \n\nThe `replacer` parameter can be a function or an array:\n\n```js\nJSON.stringify({ name: 'Peter', til: true }, ['name']);\n// '{\"name\":\"Peter\"}'\n```\n\n```js\nfunction replacer(key, value) {\n  if (key === 'name') {\n    return 'Mekhaeil';\n  }\n  return value;\n}\n\nJSON.stringify({ name: 'Peter', til: true }, replacer);\n// '{\"name\":\"Mekhaeil\",\"til\":true}'\n```",
+    "date": "2025-01-24",
+    "path": "json-stringify-replacer-parameter.md",
+    "title": "JSON.stringify replacer parameter"
+  },
+  {
+    "content": "# JSON.parse reviver parameter\n\n[JSON.parse()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse) has an optional `reviver` parameter that can transform the value being parsed.\n\nThis is useful for deserialization:\n\n```js\nconst jsonString = '{\"date\":\"Sun, 12 Feb 2023 06:45:00 GMT\"}';\n\nfunction reviver(key, value) {\n  if (key === \"date\") {\n    return new Date(value);\n  }\n  return value;\n}\n\nconst data = JSON.parse(jsonString, reviver);\n    // ^? { date: Date }\n```\n\nJSON.parse's `reviver` and JSON.stringify's `replacer` can be combined together to build a JSON serialization and deserialization utility.",
+    "date": "2025-01-24",
+    "path": "json-parse-reviver-parameter.md",
+    "title": "JSON.parse reviver parameter"
+  },
+  {
+    "content": "# JavaScript WeapMap\n\n[WeakMap](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/WeakMap) have \"weak\" reference to its keys. When the references to the key is lost and there are more references to the value, the value can be garbage collected.\n\n```tsx\nconst pokemon = { name: \"Pikachu\" };\n\nconst myPokemons = new WeakMap();\nmyPokemons.set(pokemon, 1);\n\n// reference removed\npokemon = null;\n\n// pokemon is removed from memory\nmyPokemons.has(pokemon); // false\n```\n\n## Map vs WeakMap\n\n- **WeakMap** keys must be objects and cannot be primitives.\n- If an object is used in a **Map**, as long as the Map exists, so does that the object.\n- **WeakMap** does not have interation methods (`keys()`, `values()`, `entries()`).\n- You cannot check the size of a **WeakMap**.",
+    "date": "2025-01-24",
+    "path": "js-weakmap.md",
+    "title": "JavaScript WeapMap"
+  },
+  {
+    "content": "# JavaScript: Tagged Template Literals\n\nTag templates (or tag functions) parse template literals with a function:\n\n```js\nfunction log(strings, ...args) {\n  console.log(strings, args[0])\n}\n\nconst person = \"Peter\";\nlog`My name is ${person}`;\n// ['My name is ', ''] 'Peter'\n```\n\nFirst parameter is an array of strings, the following parameters are the variables that were passed in the expression. Think of them as substitutes. The string parts of the template have an index that matches the associated substitute that followed.\n\nIn the above example, `['My name is ', '']` was the string, `Peter` was the first substitute.\n\nTag templates can come useful in formatting strings:\n\n```js\nfunction introduce(strings, ...args) {\nlet formattedString = '';\n\n  strings.forEach((string, i) => {\n    formattedString += string + (args[i] ? args[i].toUpperCase() : '');\n  });\n\n return formattedString;\n}\n\nvar person = \"Peter\";\nintroduce`My name is ${person}`\n// 'My name is PETER'\n```\n\n## Tagged Templates in the wild\n\n- [Apollo Client](https://www.apollographql.com/docs/react/data/queries/#executing-a-query)\n\n```js\nconst GET_DOGS = gql`\n  query GetDogs {\n    dogs {\n      id\n      breed\n    }\n  }\n`;\n```\n\n- [graphql-tag](https://github.com/apollographql/graphql-tag)\n\n```js\nconst query = gql`\n  {\n    user(id: 5) {\n      firstName\n      lastName\n    }\n  }\n`\n```\n\n- [postgres](https://github.com/porsager/postgres)\n\n```js\nconst users = await sql`\n  select\n    name,\n    age\n  from users\n`\n```\n\n- [Prisma](https://www.prisma.io/docs/concepts/components/prisma-client/raw-database-access)\n\n```js\nconst userId = 42\nconst result = await prisma.$queryRaw`SELECT * FROM User WHERE id = ${userId};`\n```\n\n- [Styled Components](https://styled-components.com/)\n\n```js\nconst Button = styled.a`\n  background: white;\n  color: black;\n`\n```\n\n- [twin.macro](https://github.com/ben-rogerson/twin.macro)\n\n```js\nconst Input = tw.input`border hover:border-black`\n```",
+    "date": "2025-01-24",
+    "path": "js-tagged-templates.md",
+    "title": "JavaScript: Tagged Template Literals"
+  },
+  {
+    "content": "# JavaScript Symbol.iterator\n\n[Symbol.iterator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol/iterator) defines the default iterator for an object. Applying it to an object to enable iteration:\n\n```tsx\nconst myObject = { a: 1, b: 2, c: 3 };\n\nmyObject[Symbol.iterator] = function* () {\n  for (const key of Object.keys(this)) {\n    yield [key, this[key]];\n  }\n};\n\nfor (const [key, value] of myObject) {\n  console.log(key, value);\n}\n```",
+    "date": "2025-01-24",
+    "path": "js-symbol-iterator.md",
+    "title": "JavaScript Symbol.iterator"
+  },
+  {
+    "content": "# Spread operator clones enumerables properties\n\n[Spread operator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Spread_syntax) does a shallow clone of only enumerable properties. Non-enumerable properties such as prototype will not be cloned.",
+    "date": "2025-01-24",
+    "path": "js-spread-shallow-copy.md",
+    "title": "Spread operator clones enumerables properties"
+  },
+  {
+    "content": "# Signals\n\n> Signals are reactive primitives for managing application state.\n\n([Reference](https://preactjs.com/guide/v10/signals/))\n\nSignals are **reactive**. They keep track of the subscriptions and notify subscribers when state has changed. Calling the getter creates a subscription, telling the signal of the location that requires the value.\n\n## Signals vs useState()\n\n- `useSignal()` => getter + setter\n- `useState()` => value + setter\n\n`useState()` is not reactive. React does not know of the location that requires the value, therefore must re-renders the whole component when calling the setter.\n\n([Reference](https://www.builder.io/blog/usesignal-is-the-future-of-web-frameworks))\n\n## Signals in frameworks\n\n### SolidJS\n\n```jsx\nimport { createSignal } from \"solid-js\";\n\nfunction Counter() {\n  const [count, setCount] = createSignal(0);\n\n  setInterval(() => setCount(count() + 1), 1000);\n\n  return <div>Count: {count()}</div>;\n}\n```\n\n### Qwik\n\n```jsx\nexport default component$(() => {\n  const count = useSignal(0);\n\n  return (\n    <>\n      <button onClick$={() => count.value++}>Increment</button>\n      Count: {count.value}\n    </>\n  );\n});\n```\n\n### Preact\n\n```jsx\nimport { signal } from \"@preact/signals\";\n\nconst count = signal(0);\n\nfunction Counter() {\n  return (\n    <div>\n      <p>Count: {count}</p>\n      <button onClick={() => count.value++}>click me</button>\n    </div>\n  );\n}\n```\n\n### Vue\n\n- Vue has a guide on [reactivity](https://vuejs.org/guide/extras/reactivity-in-depth.html#connection-to-signals) that compares signals with Vue's Composition API.\n- Evan You [writes Solid style signals in Vue in ~10 lines](https://twitter.com/youyuxi/status/1618181618069573633).\n- Evan You [writes Angular style signals in Vue in ~15 lines](https://twitter.com/youyuxi/status/1628214809631293440).\n\n### Angular\n \nAngular has [announced](https://github.com/angular/angular/discussions/49090) some prototyping work around adding signals as a reactive primitive in Angular.",
+    "date": "2025-01-24",
+    "path": "js-signals.md",
+    "title": "Signals"
+  },
+  {
+    "content": "# JavaScript: scrollend event\n\nThe new [scrollend](https://developer.mozilla.org/en-US/docs/Web/API/Document/scrollend_event) event fires when scrolling has ended. \n\n```js\naddEventListener(\"scrollend\", (event) => {});\n\nonscrollend = (event) => {};\n```\n\nPreviously before this event, there was no straightforward way to detect when scrolling has ended. We would have had to use the `onscroll` and a timer to detect if scrolling has ended. \n\nRead the full write-up on [developer.chrome.com](https://developer.chrome.com/blog/scrollend-a-new-javascript-event/).",
+    "date": "2025-01-24",
+    "path": "js-scrollend-event.md",
+    "title": "JavaScript: scrollend event"
+  },
+  {
+    "content": "# Using Promise.race() to implement request timeout\n\n[Promise.race()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/race) takes a list of promises and returns the first promise that settles (regardless if fulfilled or rejected).\n\nGood use to implement a request timeout. It resolves the first promise that settles which will either be the fetch request or the timeout promise.\n\n```tsx\nconst fetchApi = async () => {\n  const res = await fetch(\"/api\");\n  return await res.json();\n};\n\nconst requestTimeout = (delay: number) => {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => reject(new Error(\"Timeout\")), delay);\n  });\n};\n\nconst data = Promise.race([fetchApi, requestTimeout(5000)]);\n```",
+    "date": "2025-01-24",
+    "path": "js-promise-race.md",
+    "title": "Using Promise.race() to implement request timeout"
+  },
+  {
+    "content": "# JavaScript: Negative Zero (-0)\n\nIn JavaScript, negative zero `-0` is not the same as a positive zero `+0`.\n\nThis is because numbers in JavaScript are represented using the [IEEE 754 floating-point standard](http://en.wikipedia.org/wiki/IEEE_754) which requires [zeros to have an associated sign](http://en.wikipedia.org/wiki/Signed_zero). Floating point numbers include a sign bit (0 for positive, 1 for negative). In the case of `+0`, the sign bit is 0 while in the case of `-0` the sign bit is 1.\n\n## How does JavaScript handle comparison?\n\n```js\n+0 === -0 // true\n-0 === +0 // true\n```\n\nThis is because of [ECMAScript's _Strict Equality Comparison Algorithm_](https://262.ecma-international.org/6.0/#sec-strict-equality-comparison):\n\n> If Type(x) is Number, then    \n>  a. If x is NaN, return false.    \n>  b. If y is NaN, return false.    \n>  c. If x is the same Number value as y, return true.    \n> __d. If x is +0 and y is −0, return true.__    \n> __e. If x is −0 and y is +0, return true.__  \n> f. Return false.\n\n## How to distinguish between the two?\n\n[Object.is()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/is) can be used:\n\n```js\nObject.is(+0, -0); // false\nObject.is(-0, +0); // false\n```\n\n## How are strings handled?\n\nBoth +0 and -0 will return \"0\".\n\n```js\nconst negativeZero = -0;\nnegativeZero.toString() // \"0\"\n\nconst positiveZero = +0;\npositiveZero.toString() // \"0\"\n\nJSON.stringify({\"negativeZero\": -0}); // '{\"negativeZero\":0}'\n```",
+    "date": "2025-01-24",
+    "path": "js-negative-zero.md",
+    "title": "JavaScript: Negative Zero (-0)"
+  },
+  {
+    "content": "# Math.random() vs Crypto.getRandomValue()\n\n- [Math.random()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random) **does not provide cryptographically secure random numbers**.\n- [Crypto.getRandomValues()](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues) returns **cryptographically strong** random values.\n\n`Math.random()` is implemented using a [pseudo-random number generator (PRNG)](https://en.wikipedia.org/wiki/Pseudorandom_number_generator) - the random number is derived from an internal state, which is altered by a fixed algorithm for every new random number. The sequence of random numbers is deterministic. \n\n`Crypto.getRandomValues()` use a pseudo-random number generator seeded with a value with enough entropy. Implementations do not use a truly random number generator to guarantee enough performance but the output is suitable for cryptographic purposes.\n\n```js\ncrypto.getRandomValues(new Uint8Array(10))\n// Uint8Array(10) [85, 215, 117, 156, 114, 11, 222, 34, 65, 119]\n```",
+    "date": "2025-01-24",
+    "path": "js-math-random-vs-crypto.md",
+    "title": "Math.random() vs Crypto.getRandomValue()"
+  },
+  {
+    "content": "# JavaScript Map\n\nA much cleaner and performant alternative to objects.\n\n```tsx\nconst myPokemons = new Map();\n\nconst bulbasaur = { id: 1, name: \"Bulbasaur\" };\n\nmyPokemons.set(bulbasaur.id, bulbasaur);\nmyPokemons.delete(bulbasaur.id);\n```\n\n## Iterating\n\n```tsx\nfor (const [key, value] of myPokemons) {\n  // ...\n}\n```\n\n- Cleaner to iterate compared to objects.\n- Iterates in the order of entry insertion.\n\n## Iterators \n\n```tsx\n// Iterator of all map keys\nmyPokemons.keys();\n\n// Iterator of all map values\nmyPokemons.values();\n```\n\n## Cloning\n\n```tsx\nconst clonedPokemons = new Map(myPokemons);\n\n// deep cloning\nconst deepClone = structuredClone(myPokemons);\n```\n\n## Converting to objects\n\n```tsx\nconst myObj = Object.fromEntries(myMap);\n```\n\n## Converting to Map\n\n```tsx\nconst myMap = new Map(Object.entries(myObj));\n```\n\n## Use any type of object as keys\n\n```tsx\nmyMap.set(document.body, value);\nmyMap.set(function() {}, value);\nmyMap.set(myPokemon, value);\n```",
+    "date": "2025-01-24",
+    "path": "js-map.md",
+    "title": "JavaScript Map"
+  },
+  {
+    "content": "# JavaScript Import Map\n\nAn [import map](https://github.com/WICG/import-maps) is JSON that browsers use to resolve the path of JS modules when used in `import` and `import()` statements. \n\nAn example can be found on [three.js](https://threejs.org/docs/#manual/en/introduction/Installation):\n\n```html\n<script type=\"importmap\">\n  {\n    \"imports\": {\n      \"three\": \"https://unpkg.com/three@0.149.0/build/three.module.js\"\n    }\n  }\n</script>\n\n<script type=\"module\">\n  import * as THREE from 'three';\n  const scene = new THREE.Scene();\n</script>\n```\n\nAnother example commonly seen in micro-frontends:\n\n```html\n<script type=\"importmap\">\n  {\n    \"imports\": {\n      \"react\": \"https://unpkg.com/react@18.2.0/umd/react.production.min.js\",\n      \"react-dom\": \"https://unpkg.com/react-dom@18.2.0/umd/react-dom.production.min.js\"\n    }\n  }\n</script>\n\n<script type=\"module\">\n  import * as React from 'react';\n  import * as ReactDOM from 'react-dom';\n</script>\n```",
+    "date": "2025-01-24",
+    "path": "js-import-map.md",
+    "title": "JavaScript Import Map"
+  },
+  {
+    "content": "# Fetch Response.statusText\n\nEver wondered why [Response.statusText](https://developer.mozilla.org/en-US/docs/Web/API/Response/statusText) returns an empty string? It's because it is not part of the HTTP/2 spec. \n\n> HTTP/2 does not define a way to carry the version or reason phrase that is included in an HTTP/1.1 status line.\n\nOtherwise, in HTTP/1 it will return status message such as `OK`, `Continue` and `Not Found`.\n\nReference:\n\n- [RFC 7540](https://tools.ietf.org/html/rfc7540#section-8.1.2.4)\n- [whatwg/fetch#599](https://github.com/whatwg/fetch/issues/599)",
+    "date": "2025-01-24",
+    "path": "js-fetch-status-text.md",
+    "title": "Fetch Response.statusText"
+  },
+  {
+    "content": "# Copy a function in JavaScript\n\n```js\nconst newFunction = oldFunction.bind({});\n```\n\n- [Function.prototype.bind()](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind) creates a new function with `this` set to the value passed in the argument. \n- A new function is created and it references the function that bind was called on.\n- The new function will not have references to any additional properties that may have been attached to the original function.",
+    "date": "2025-01-24",
+    "path": "js-bind.md",
+    "title": "Copy a function in JavaScript"
+  },
+  {
+    "content": "# Send analytics data using the Beacon API\n\nThe `navigator.sendBeacon()` method is intended to be used for sending analytics data to a server.\n\n```js\nnavigator.sendBeacon(\"/log\", analyticsData);\n```\n\n- It sends the HTTP POST request asynchronously, with no access to the server response.\n- The request is non-blocking, causing no delay to unload or the next navigation.\n\nSee [documentation](https://developer.mozilla.org/en-US/docs/Web/API/Beacon_API) on usage.",
+    "date": "2025-01-24",
+    "path": "js-beacon-api.md",
+    "title": "Send analytics data using the Beacon API"
+  },
+  {
+    "content": "# JavaScript Barrel File\n\nA barrel file is a module that re-exports from other modules:\n\n```js\n// ./components/index.js\nexport { Button } from './Button.js';\nexport { Anchor } from './Anchor.js';\nexport { Text } from './Text.js'\n```\n\nUsage:\n\n```js\nimport { Button, Anchor, Text } from './components';\n```\n\n## Performance Impact\n\nBarrel files have an impact on your bundler performance (this is how I came across the term _Barrel Files_). \n\n- [Next.js recommend to not use them](https://nextjs.org/blog/next-13-1#import-resolution-for-smaller-bundles).\n- They make it difficult on bundlers to analyse your code.  \n- They risk exporting modules of the same name.\n- They have a chance of circular references.\n\n## Read More\n\n- https://marvinh.dev/blog/speeding-up-javascript-ecosystem-part-7/\n- https://renatopozzi.me/articles/your-nextjs-bundle-will-thank-you\n- https://flaming.codes/posts/barrel-files-in-javascript",
+    "date": "2025-01-24",
+    "path": "js-barrel-files.md",
+    "title": "JavaScript Barrel File"
+  },
+  {
+    "content": "# Add an object to existing JSON using jq\n\n```bash\n# Optional: Create new JSON file `feed.json` with empy array.\njq -n '[]' > feed.json\n\n# Append an object to the array from `feed.json` \n# and store the new JSON in `feed.json.tmp`\njq \\\n    --arg date \"$date\" \\\n    --arg title \"$title\" \\\n    '. += [{\"date\": $date, \"title\": $title}]' \\\n    feed.json > feed.json.tmp\n\n# Replace temp file with original file.\nmv feed.json.tmp feed.json\n```\n\n- `--arg content \"$content\"` creates a variable `$content` to be used within the `jq` tool.\n- `'. += [{...}]' feed.json` appends a new object to the array from `feed.json`.\n- `> feed.json.tmp` is redirecting the output of `jq` into a temporarily file.\n- `mv feed.json.tmp feed.json` is replacing original file with the new temporarily file. Basically updating the original file with the new content.",
+    "date": "2025-01-24",
+    "path": "jq-append-json.md",
+    "title": "Add an object to existing JSON using jq"
+  },
+  {
+    "content": "# Smart App Banners\n\nThe banners on top of web apps that promote the native version of the app is controlled using a `<meta>` tag in the HTML:\n\n```html\n<meta name=\"apple-itunes-app\" content=\"app-id=1477376905, app-argument=https://github.com/\" />\n```\n\nSee the [documentation on Promoting Apps with Smart App Banners\n](https://developer.apple.com/documentation/webkit/promoting_apps_with_smart_app_banners). This only works for iOS Safari.\n\nExample from GitHub:\n\n![IMG_1477](https://github.com/petermekhaeil/til/assets/4616064/f7cf2b12-abe9-498e-9962-57fbbcd8f1c0)",
+    "date": "2025-01-24",
+    "path": "ios-smart-app-banners.md",
+    "title": "Smart App Banners"
+  },
+  {
+    "content": "# import.meta\n\n[import.meta](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/import.meta) is an object that is available within Javascript ES modules. It contains metadata about the module and is extensible.\n\nIt contains `import.meta.url` that returns the full URL of the module.\n\n```html\n<script type=\"module\" src=\"module.mjs\"></script>\n```\n\n```js\n// module.mjs\nlet img = document.createElement('img');\nimg.src = new URL('image.jpg', import.meta.url);\ndocument.body.appendChild(img);\n```\n\n## Difference from process.env\n\n`process.env` is specific to Node and cannot be used in the browser.\n\n## TypeScript support\n\n```ts\ninterface ImportMeta {\n  myVariable: string\n}\n\nimport.meta.myVariable; // string\n```\n\n## Uses\n\n[Vite](https://vitejs.dev) extend `import.meta` to add things like:\n- [Env Variables](https://vitejs.dev/guide/env-and-mode.html#env-variables-and-modes): `import.meta.env`.\n- [Glob Import](https://vitejs.dev/guide/features.html#glob-import-as): `import.meta.glob`",
+    "date": "2025-01-24",
+    "path": "import-meta.md",
+    "title": "import.meta"
+  },
+  {
+    "content": "# The Mark Text element\n\nThe [\\<mark\\>](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/mark) HTML element represents marked or highlighted text.\n\n```html\n<span><mark>Peter</mark> Mekhaeil</span>\n```\n\nCan be styled:\n\n```css\nmark {\n  background-color: yellow;\n  color: black;\n}\n```",
+    "date": "2025-01-24",
+    "path": "html-mark-element.md",
+    "title": "The Mark Text element"
+  },
+  {
+    "content": "# Hex color notation have an alpha channel\n\nThe hex color notation can be described as `#RGB[A]` or `#RRGGBB[AA]` - it accepts an alpha channel that can be used to represent the transparency.\n\nWhen using it as `#RRGGBB[AA]`, the alpha channel is a hexadecimal number where `00` is full transparent and `FF` full opaque. If using the shorter `#RGB[A]` notation, it is a hexadecimal number ranging from `0` and `F`.\n\n```cs\n#FF7f00     /* orange               */\n#FF7f0000   /* orange \t 0% opaque  */\n#FF7f0080   /* orange   50% opaque  */\n#FF7f00FF   /* orange  100% opaque  */\n\n#01E        /* blue               */\n#01E0       /* blue     0% opaque */\n#01E8       /* blue    53% opaque */\n#01EF       /* blue   100% opaque */\n```\n\nYou can find out more on [MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/hex-color).",
+    "date": "2025-01-24",
+    "path": "hex-color-notation-alpha-channel.md",
+    "title": "Hex color notation have an alpha channel"
+  },
+  {
+    "content": "# GitHub Issue Forms\n\nGitHub supports web form fields in issue templates:\n\n```yaml\nname: Feature request\ndescription: Suggest an idea for this project\nbody:\n  - type: markdown\n    attributes:\n      value: |\n        Thanks for taking the time to fill out this feature report!\n  - type: textarea\n    id: feature-description\n    attributes:\n      label: Description\n      description: \"A clear and concise description of what the problem is.\"\n      placeholder: Ex. I'm always frustrated when [...].\n    validations:\n      required: true\n```\n\nThis will render the below form:\n\n![Screenshot 2023-12-10 at 9 59 16 PM](https://github.com/petermekhaeil/til/assets/4616064/bdf28f4e-bc6c-4303-a789-8b2c3b9b9c09)\n\n## Learn More\n- [Documentation](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository#creating-issue-forms)\n- [Syntax for GitHub's form schema](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-githubs-form-schema)",
+    "date": "2025-01-24",
+    "path": "github-issue-forms.md",
+    "title": "GitHub Issue Forms"
+  },
+  {
+    "content": "# Create a release in GitHub using API\n\nThere are 3 ways to create a release using the GitHub API. \n\n## Parameters\n\n- `tag_name`: The name of the tag.\n- `name`: The name of the release.\n- `body`: The description of the release.\n\nThere are more parameters in the [documentation](https://docs.github.com/en/rest/releases/releases#create-a-release).\n\nSample repository with releases: [git-tag-release](https://github.com/petermekhaeil/git-tag-release/releases).\n\n## Using cURL\n\n```bash\ncurl \\\n  -X POST \\\n  -H \"Accept: application/vnd.github+json\" \\\n  -H \"Authorization: Bearer <YOUR-TOKEN>\"\\\n  -H \"X-GitHub-Api-Version: 2022-11-28\" \\\n  https://api.github.com/repos/OWNER/REPO/releases \\\n  -d '{\"tag_name\":\"v0.0.0\",\"name\":\"v0.0.0\",\"body\":\"Full Changelog: https://github.com/OWNER/REPO/commits/v0.0.0\"}'\n```\n\n## Using JavaScript\n\nUsing [Octokit](https://github.com/octokit/core.js#readme):\n\n```js\nconst octokit = new Octokit({\n  auth: 'YOUR-TOKEN'\n});\n\nawait octokit.request('POST /repos/{owner}/{repo}/releases', {\n  owner: 'OWNER',\n  repo: 'REPO',\n  tag_name: 'v0.0.0',\n  name: 'v0.0.0',\n  body: 'Full Changelog: https://github.com/OWNER/REPO/commits/v0.0.0'\n});\n```\n\n## Using GitHub CLI\n\n[GitHub CLI Manual](https://cli.github.com/manual/gh_api)\n\n```bash\ngh api \\\n  --method POST \\\n  -H \"Accept: application/vnd.github+json\" \\\n  /repos/OWNER/REPO/releases \\\n  -f tag_name='v0.0.0' \\\n  -f name='v0.0.0' \\\n  -f body='Full Changelog: https://github.com/OWNER/REPO/commits/v0.0.0'\n```",
+    "date": "2025-01-24",
+    "path": "github-create-release.md",
+    "title": "Create a release in GitHub using API"
+  },
+  {
+    "content": "# Show contents of Git stash\n\nTo show list of files in the most recent Git stash:\n\n```bash\ngit stash show\n```\n\nTo show the diff:\n\n```bash\ngit stash show -p\n```\n\nTo show content of nth most recent stash:\n\n```bash\ngit stash show -p stash@{n}\n```",
+    "date": "2025-01-24",
+    "path": "git-stash-show.md",
+    "title": "Show contents of Git stash"
+  },
+  {
+    "content": "# Restore a deleted file in Git\n\nFind the commits that contain the file. Take note of the last commit that deleted the file:\n\n```bash\ngit log --all --full-history --oneline -- <file-path>\n```\n\n- `--all`: Show commits in all branches, tags and refs.\n- `--full-history`: Show full history of commits.\n- `--oneline`: Pretty format because we only need the commit hash.\n\nRestore the file by checking out the commit that happened before it was deleted:\n\n```bash\ngit checkout <deleting-commit>^ -- <file-path>\n```\n\nThe `^` means \"parent of\" - in the above example, it means checkout the parent commit of the deleting commit. This would contain the file and its content before it was deleted.",
+    "date": "2025-01-24",
+    "path": "git-restore-deleted-file.md",
+    "title": "Restore a deleted file in Git"
+  },
+  {
+    "content": "# Replace a Git Repository with a New One\n\nSometimes you need to reset a remote Git repository while keeping your local history intact. Here's how:\n\n**1. Add the Remote:**\n```bash\ngit remote add origin <remote-url>\n```\n\nLinks your local repo to the remote.\n\n**2. Force Push to Overwrite Remote History:**\n```bash\ngit push --force --set-upstream origin main\n```\n\nReplaces the remote history with your local history.",
+    "date": "2025-01-24",
+    "path": "git-replace-repo-content.md",
+    "title": "Replace a Git Repository with a New One"
+  },
+  {
+    "content": "# Git Remove All Commits\n\nClean up history from a repository by removing the git commits and replacing it with a new single commit.\n\n1. Create a temporarily branch disconnected from all the other branches and commits:\n\n```bash\ngit checkout --orphan temp_branch\n```\n\n2. Add the files to new temporarily branch:\n\n```bash\ngit add -A\n```\n\n3. Commit the changes:\n\n```bash\ngit commit -am \"First commit\"\n```\n\n4. Delete the main branch:\n\n```bash\ngit branch -D master\n```\n\n5. Rename temporarily branch to the main branch:\n\n```bash\ngit branch -m master\n```\n\n6. Force push the new main branch:\n\n```bash\ngit push -f origin master\n```",
+    "date": "2025-01-24",
+    "path": "git-remove-all-commits.md",
+    "title": "Git Remove All Commits"
+  },
+  {
+    "content": "# Git: push --force-with-lease",
+    "date": "2025-01-24",
+    "path": "git-push-force-with-lease.md",
+    "title": "Git: push --force-with-lease"
+  },
+  {
+    "content": "# Git: Work with multiple accounts\n\n- Configure multiple host aliases in ssh configuration:\n\n```bash\n# ~/.ssh/config\n\nHost github.com\n  HostName github.com\n  User git\n  IdentityFile ~/.ssh/id_rsa\n  \nHost github.com-work\n  HostName github.com\n  User git\n  IdentityFile ~/.ssh/id_rsa_work\n```\n\n- To use a different name and email, add [conditional includes](https://git-scm.com/docs/git-config#_conditional_includes) in git configuration to supply a different `.gitconfig` path based on working directory:\n\n```bash\n# ~/.gitconfig\n\n[user]\n    name = Default Name\n    email = default.name@example.com\n\n[includeIf \"gitdir:~/work/\"]\n    path = ~/work/.gitconfig\n```\n\n```bash\n# ~/work/.gitconfig\n\n[user]\n    name = Work Name\n    email = work.email@example.com\n```\n\n- Use the new host alias as remote url:\n\n```bash\ngit remote add origin git@github.com-work:username/repo.git\n```",
+    "date": "2025-01-24",
+    "path": "git-multiple-accounts.md",
+    "title": "Git: Work with multiple accounts"
+  },
+  {
+    "content": "# Use same git commit message as previous commit\n\n```bash\ngit commit --reuse-message HEAD\n```\n\n`--reuse-message` takes an existing commit and reuse the log message.\n\nAdd `--edit` to bring up the editor if you wish to edit the message before committing.",
+    "date": "2025-01-24",
+    "path": "git-commit-same-message.md",
+    "title": "Use same git commit message as previous commit"
+  },
+  {
+    "content": "# Checkout previous branch in Git\n\n- `git checkout -` is a shorthand for `git checkout @{-1}`. It will checkout the last previous branch.\n- `@{-1}` refers to the last branch that was checked. It can be used with `git checkout @{-1}` to checkout the previous branch.\n- You can also checkout the N-th last branch using `git checkout @{-N}`.",
+    "date": "2025-01-24",
+    "path": "git-checkout-previous-branch.md",
+    "title": "Checkout previous branch in Git"
+  },
+  {
+    "content": "# Add to previous Git commit\n\n```bash\ngit add my-file\ngit commit --amend --no-edit\n```\n\n- `--amend`: Amends previous commit.\n- `--no-edit`: Use previous commit message.",
+    "date": "2025-01-24",
+    "path": "git-add-to-previous-commit.md",
+    "title": "Add to previous Git commit"
+  },
+  {
+    "content": "# Get last modified date using GitHub GraphQL API\n\nQuery the first item in the history of that path and return the `committedDate`:\n\n```graphql\nquery CommittedDate($name: String!, $owner: String!, $path: String!) {\n  repository(owner: $owner, name: $name) {\n    ref(qualifiedName: \"refs/heads/master\") {\n      target {\n        ... on Commit {\n          history(first: 1, path: $path) {\n            edges {\n              node {\n                committedDate\n              }\n            }\n          }\n        }\n      }\n    }\n  }\n}\n```",
+    "date": "2025-01-24",
+    "path": "get-last-modified-date-using-github-graphql-api.md",
+    "title": "Get last modified date using GitHub GraphQL API"
+  },
+  {
+    "content": "# Redirect stderr to stdout using 2>&1\n\n`2>&1` is used to redirect standard error (`stderr`) to standard output (`stdout`). It allows you to capture and handle both types of output in the same way.\n\n## File descriptors\n\nThere are 3 [file descriptors](http://en.wikipedia.org/wiki/File_descriptor), represented by numbers:\n\n- `0` [stdin](https://en.wikipedia.org/wiki/Standard_streams#Standard_input_(stdin))\n- `1` [stdout](https://en.wikipedia.org/wiki/Standard_streams#Standard_output_(stdout))\n- `2` [stderr](https://en.wikipedia.org/wiki/Standard_streams#Standard_error_(stderr))\n\n## Redirection\n\n`>` is used to redirect the output of a command to something else. \n\n## File descriptor\n\n`&` indicates that what follows is a file descriptor (in the context of a redirection). It is required otherwise it will interpret the `1` as a filename (eg `2>1` would mean \"redirect stderr to a file named 1\").\n\n## Putting it together\n\n`2>&1` indicates that file descriptor 2 (`stderr`) should be redirected to file descriptor 1 (`stdout`).\n\n## Examples\n\n```bash\ncommand > /dev/null 2>&1\n```\n\nThe stdout of `command` is redirected to `/dev/null` and stderr is redirected to stdout. Meaning everything is redirected to `/dev/null`.\n\n```bash\ncat file.txt > output.txt 2>&1\n```\n\nSend the content of `file.txt` to `output.txt`. If any errors (eg. file does not exist), send it to stdout which is also `output.txt`.\n\n```bash\nls -l ./apps/ ./packages 2> /dev/null\n```\n\nList the content of `./apps` and `./packages`. If there was any errors (eg. directory does not exist), send stderr to `/dev/null`.",
+    "date": "2025-01-24",
+    "path": "file-descriptor-redirection.md",
+    "title": "Redirect stderr to stdout using 2>&1"
+  },
+  {
+    "content": "#  ESLint's `no-restricted-syntax` rule\nESLint's `no-restricted-syntax` uses [selectors](https://eslint.org/docs/latest/developer-guide/selectors) to query an AST and this can be used to restrict certain syntax from being used.\n\nUse a [AST Explorer](https://astexplorer.net/) to view the resulting AST of the JavaScript code you want to query.\n\nThis rule disallows the use of `MyLibrary.myFunction()`:\n\n```json\n{\n  \"rules\": {\n    \"no-restricted-syntax\": [\n      \"error\",\n      {\n        \"selector\": \"MemberExpression[property.name='myFunction'][object.name='MyLibrary']\",\n        \"message\": \"'MyLibrary.myFunction()' is depreciated. Please use MyOtherLibrary.myNewFunction()\"\n      }\n    ]\n  }\n}\n```\n\nThis rule disallows the use of `MyLibrary().myFunction()`:\n\n```json\n{\n  \"rules\": {\n    \"no-restricted-syntax\": [\n      \"error\",\n      {\n        \"selector\": \"[property.name='myFunction'] CallExpression[callee.name='MyLibrary']\",\n        \"message\": \"'MyLibrary().myFunction()' is depreciated. Please use MyOtherLibrary.myNewFunction()\"\n      }\n    ]\n  }\n}\n```",
+    "date": "2025-01-24",
+    "path": "eslint-no-restricted-syntax.md",
+    "title": " ESLint's `no-restricted-syntax` rule"
+  },
+  {
+    "content": "# Enable HTTP/2 in Vite's Dev Server by using HTTPS\n\nTake advantage of [HTTP/2](https://developer.mozilla.org/en-US/docs/Glossary/HTTP_2) in Vite Dev Server by enabling `server.https` in your `vite.config.js`.\n\n```js\n{\n  server: {\n    https: true\n  }\n}\n```\n\nBrowsers limit the number of active connections per domain when using HTTP/1.1 and this can be avoided by enabling HTTP/2 which supports unlimited concurrent requests.\n\nVite's Dev server takes advantage of modern browser's support for [ES Modules](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules) and instead of bundling your site, the dev server will serve the modules via network requests in your browser. Enabling HTTP/2 can come handy in large applications that need to serve a lot of these modules.",
+    "date": "2025-01-24",
+    "path": "enable-http2-in-vites-dev-server-by-using-https.md",
+    "title": "Enable HTTP/2 in Vite's Dev Server by using HTTPS"
+  },
+  {
+    "content": "# EditorConfig Glob Expressions\n\nThe sections in `.editorconfig` are filepath globs. They can be used to define config for certain files and directories:\n\n```ini\nroot = true\n\n[*]\nindent_style = tab\nindent_size = 2\ninsert_final_newline = true\n\n# Match exact file package.json\n[package.json]\nindent_style = space\n\n# Match .css files under test directory\n[test/**/*.css]\ninsert_final_newline = false\n```",
+    "date": "2025-01-24",
+    "path": "editorconfig-glob-expressions.md",
+    "title": "EditorConfig Glob Expressions"
+  },
+  {
+    "content": "# How to Stop All Docker Containers\n\n```bash\ndocker kill $(docker ps -q)\n```\n\n- `docker ps`: Lists all running containers. `-q` only return the container IDs.\n- `docker kill`: Stops the continers by container ID.\n\n## Remove all containers\n\n```bash\ndocker rm $(docker ps -a -q)\n```\n\n- `docker ps -a -q`: Lists all containers (including non-running) and only return their IDs.\n- `docker rm`: Remove containers by their ID.\n\n## Remove all images\n\n```bash\ndocker rmi $(docker images -q)\n```\n\n- `docker images -q`: Lists all images by their IDs.\n- `docker rmi`: Removes docker images by their ID.",
+    "date": "2025-01-24",
+    "path": "docker-stop-all.md",
+    "title": "How to Stop All Docker Containers"
+  },
+  {
+    "content": "# Push Docker image to self-hosted registry\n\nSteps on building a Docker image and pushing it to a self-hosted registry:\n\n1. Build the Docker image using `docker build`. \n2. Run `docker login` to log in to the registry.\n3. Tag the image to the registry using `docker tag`.\n4. Push the image to the registry using  `docker push`.\n\nPutting it together in an example:\n\n```bash\n# Build the image\ndocker build -t app:1.0.0 .\n\n# Log into the registry\ndocker login example.com\n\n# Tag the image to the registry\ndocker tag app:1.0.0 example.com/app:1.0.0\n\n# Push the image to the registry\ndocker push example.com/app:1.0.0\n```\n\nThis will create an image with the name `example.com/app:1.0.0` being pushed to the registry.",
+    "date": "2025-01-24",
+    "path": "docker-push-to-registry.md",
+    "title": "Push Docker image to self-hosted registry"
+  },
+  {
+    "content": "# Docker: Copy files from another image\n\n`COPY --from` is used for [mulit-stage builds](https://docs.docker.com/build/building/multi-stage/) and it is used to copy from another image, either by referencing a local image name or a tag available on a Docker registry. \n\n```docker\nCOPY --from=nginx:latest /etc/nginx/nginx.conf /nginx.conf\n```\n\nIt can also be used for copying from stages created earlier in the Dockerfile:\n\n```docker\n# stage 1\nFROM alpine as git\nRUN apk add git\n\n# stage 2\nFROM git as fetch\nWORKDIR /repo\nRUN git clone https://github.com/your/repository.git .\n\n# stage 3\nFROM nginx as site\nCOPY --from=fetch /repo/docs/ /usr/share/nginx/html\n```",
+    "date": "2025-01-24",
+    "path": "docker-copy-from-image.md",
+    "title": "Docker: Copy files from another image"
+  },
+  {
+    "content": "# List the files with the most disk usage\n\n```bash\ndu -h [DIRECTORY] | sort -hr | head -n 10\n```\n\nThe `du` command returns the estimated disk usage used. \n\n- `-h`: Show sizes in human readable format (eg. 2K, 1G).\n\nUse `sort` to organise the output:\n\n- `-h`: Sort by human readable numbers (eg. 2K, 1G).\n- `-r`: Reverse the output (so it is in descending order).\n\nShow the top 10 items using `head`:\n\n- `-[NUMBER]`: Number of lines to output (Default is 10).",
+    "date": "2025-01-24",
+    "path": "disk-usage.md",
+    "title": "List the files with the most disk usage"
+  },
+  {
+    "content": "# Override web content and HTTP response headers locally\n\nChrome DevTools allows you to override API responses and HTTP headers directly in the browser - this is a great feature for testing, debugging, and prototyping without modifying the backend.\n\nYou can:\n\n- **Mock API responses**: Replace live API data with custom JSON or other content.\n- **Modify HTTP headers**: Adjust headers like CORS, Content-Type, or authentication tokens to mimic different scenarios.\n  \nYou just need to enable \"Local Overrides\" in DevTools and edit the response or headers for the network requests you want to tweak.\n\nMore details here: [Chrome DevTools Overrides](https://developer.chrome.com/docs/devtools/overrides)",
+    "date": "2025-01-24",
+    "path": "devtools-overrides.md",
+    "title": "Override web content and HTTP response headers locally"
+  },
+  {
+    "content": "# Emulate a focused page in DevTools\n\nIf you switch focus from the current page to the Chrome DevTools, some overlay elements automatically hide if they are triggered by focus. For example, dropdown menus.\n\nThe Chrome DevTools have a feature to emulate page focus. Press `Ctrl+Shift+P` (or `Cmd+Shift+P` on macOS) and search for \"Emulate a focused page\". You won't lose focus of the page while inspecting the elements.\n\n![Screenshot 2023-10-25 at 10 32 59 PM](https://github.com/petermekhaeil/til/assets/4616064/abd0854f-dac1-43e9-868b-d71496401f7b)",
+    "date": "2025-01-24",
+    "path": "devtools-emulate-focused-page.md",
+    "title": "Emulate a focused page in DevTools"
+  },
+  {
+    "content": "# Delete files by modified date\n\n```bash\nfind ./my-folder -mtime +10 -type f -delete\n```\n\n- `-mtime +10`: Filter files that have a last modified date 10 days ago.\n- `-type f`: Filter files only.\n- `-delete`: Delete files matching the filters.",
+    "date": "2025-01-24",
+    "path": "delete-files-by-modified-date.md",
+    "title": "Delete files by modified date"
+  },
+  {
+    "content": "# Dart Supports Underscore Digit Separators\n\nIn Dart (starting from version 3.6.0), you can use underscores (`_`) as digit separators in number literals to make them more readable. This is especially handy for large numbers or when grouping digits for higher-level clarity.\n\nHere are some examples:\n\n```dart\nvar n1 = 1_000_000;\nvar n2 = 0.000_000_000_01;\nvar n3 = 0x00_14_22_01_23_45;  // MAC address\nvar n4 = 65_1234_5678;  // SG Phone number\nvar n5 = 100__000_000__000_000;  // one hundred million million!\n```\n\nThis feature makes it easier to read long numeric values and organize digits meaningfully.\n\nDart isn’t alone in supporting this - other languages like JavaScript, Java, Python, and Kotlin also allow underscore digit separators. It's a great example of a feature that crosses language boundaries to make code cleaner and more human-readable.",
+    "date": "2025-01-24",
+    "path": "dart-digit-separators.md",
+    "title": "Dart Supports Underscore Digit Separators"
+  },
+  {
+    "content": "# Cypress cy.clock()\n\n[cy.clock()](https://docs.cypress.io/api/commands/clock) allows you to control time in your Cypress test:\n\n```js\ncy.clock();\ncy.intercept('GET', '/pokemon').as('pokemon');\n// 1st call\ncy.wait('@pokemon');\n\n// forward 10 seconds and wait for next `/pokemon` request\ncy.tick(10_000);\ncy.wait('@pokemon');\n```",
+    "date": "2025-01-24",
+    "path": "cypress-clock.md",
+    "title": "Cypress cy.clock()"
+  },
+  {
+    "content": "# CSS pseudo-classes and pseudo-elements\n\n[Pseudo-classes](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) are states applied to the selected elements. They have a single colon (`:`).\n\n```css\nbutton:hover {\n  background: red;\n}\n```\n\n[Pseudo-elements](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements) selects specific parts of the selected elements. They have double colons (`::`).\n\n```css\np::first-line {\n  text-transform: uppercase;\n}\n```",
+    "date": "2025-01-24",
+    "path": "css-pseudo-classes-elements.md",
+    "title": "CSS pseudo-classes and pseudo-elements"
+  },
+  {
+    "content": "# CSS :is() pseudo-class\n\nThe [:is](https://developer.mozilla.org/en-US/docs/Web/CSS/:is) pseudo-class takes a list of selectors and selects any elements that matches the selectors in that list. Its useful to compact large selectors. \n\nTake this example:\n\n```css\nheader h2,\nnav h2,\narticle h2 {\n  color: black;\n}\n```\n\nCan be written as:\n\n```css\nis:(header, nav, article) h2 {\n  color: black;\n}\n```\n\n## Learn More\n\nIt's worth noting there is a difference between `:is` and `:where()` when it comes to specificity value. Detailed explanations:\n\n- [MDN Docs](https://developer.mozilla.org/en-US/docs/Web/CSS/:is)\n- [Simpler CSS Selectors With :is()](https://www.builder.io/blog/css-is)\n- [Using :is() in complex selectors selects more than you might initially think](https://www.bram.us/2023/01/17/using-is-in-complex-selectors-selects-more-than-you-might-initially-think/)",
+    "date": "2025-01-24",
+    "path": "css-is-pseudo-class.md",
+    "title": "CSS :is() pseudo-class"
+  },
+  {
+    "content": "# CSS :has() pseudo-class\n\nThe `:has(<selector>)` pseudo-class selects elements that contain certain child elements that match the `<selector>` selectors.\n\n## Demo\n\nOpen the [CodeSandbox](https://pmen4y.csb.app/) demo. The `:has()` selector is being used to select the pricing card that contains a `.popular` element:\n\n```css\n.pricing-card:has(.popular) { \n  border-color: blue; \n}\n```\n\n## Examples\n\n```css\n/* section that contain an image */\nsection:has(img) {\n  color: red;\n}\n\n/* section that contain a .sale element */\nsection:has(.sale) {\n  border-color: red;\n}\n\n/* section that does NOT contain a .sale element */\nsection:not(:has(.sale)) {\n  border-color: red;\n}\n\n/* paragraph that contains an anchor */\np:has(a) {\n  color: blue;\n}\n\n/* paragraph that contains a an image as first sibling */\np:has(> img) {\n  color: blue;\n}\n\n/* paragraph that contains a an image as first sibling */\np:has(> img) {\n  color: blue;\n}\n\n/* h1 that is followed by a paragraph */\nh1:has(+ p) { \n  margin-bottom: 0; \n}\n```\n\n## Support\n\nSee [caniuse.com](https://caniuse.com/?search=has) for browser support.\n\nCan also use CSS to detect if the feature is supported:\n\n```css\n@supports(selector(:has(img))) {}\n```",
+    "date": "2025-01-24",
+    "path": "css-has-pseudo-class.md",
+    "title": "CSS :has() pseudo-class"
+  },
+  {
+    "content": "# CSS property: font-variant-numeric\n\nSome OpenType fonts support alternate numeric glyphs that can be styled using `font-variant-numeric`.\n\n## Demo\n\nHere is a [CodeSandbox](https://flqxy1.csb.app/) that demonstrate each value. This demo uses the \"Source Sans Pro\" font which supports these features.\n\nTake a look at the `tabular-nums` feature - it can make the design of tabular data very satisfying. \n\n## Syntax\n\n```css\n/* normal: Disable using alternate glyphs */\nfont-variant-numeric: normal;\n\n/* ordinal: Use letters to represent numeric order */\nfont-variant-numeric: ordinal;\n\n/* slashed-zero: Use a 0 with a diagonal slash */\nfont-variant-numeric: slashed-zero;\n\n/* lining-nums: Use glyphs that are all aligned by their baseline. */\nfont-variant-numeric: lining-nums;\n\n/* oldstyle-nums: Use glyphs where some numbers have descenders */\nfont-variant-numeric: oldstyle-nums; \n\n/* proportional-nums: Use glyphs where numbers are not all of the same size */\nfont-variant-numeric: proportional-nums; \n\n/* tabular-nums: Use glyphs where numbers all have the same width */\nfont-variant-numeric: tabular-nums; \n\n/* diagonal-fractions: Use diagonal fractions (numbers are made smaller and separated by a slash) */\nfont-variant-numeric: diagonal-fractions; \n\n/* stacked-fractions: Numbers are made smaller, stacked and separated by a horizontal line */\nfont-variant-numeric: stacked-fractions; \n```\n\nValues can be combined together:\n\n```css\nfont-variant-numeric: slashed-zero tabular-nums;\n```\n\n## Support\n\nNot all fonts support these features. The values will have no effect if the font family does not have support.\n\n## Learn More\n\n- [MDN Web Docs: font-variant-numeric](https://developer.mozilla.org/en-US/docs/Web/CSS/font-variant-numeric)\n- [CSS Tricks: font-variant-numeric](https://css-tricks.com/almanac/properties/f/font-variant-numeric/)",
+    "date": "2025-01-24",
+    "path": "css-font-variant-numeric.md",
+    "title": "CSS property: font-variant-numeric"
+  },
+  {
+    "content": "# CSS ::first-letter pseudo-element\n\nCSS can be applied to the first letter of an element:\n\n```css\np::first-letter {\n  text-transform: uppercase;\n}\n```",
+    "date": "2025-01-24",
+    "path": "css-first-letter.md",
+    "title": "CSS ::first-letter pseudo-element"
+  },
+  {
+    "content": "# CSS.escape()\n\n[CSS.escape()](https://developer.mozilla.org/en-US/docs/Web/API/CSS/escape) returns an string that conforms to the CSS selector specs. Useful when generating dynamic CSS selectors based on an input.\n\n```js\nCSS.escape(\"app:@org/name\");\n// 'app\\\\:\\\\@org\\\\/name'\n```",
+    "date": "2025-01-24",
+    "path": "css-escape.md",
+    "title": "CSS.escape()"
+  },
+  {
+    "content": "# No browser cache with self-signed certificates\n\nIf there is a certificate error, Chromium based browsers will not cache responses and will treat a self-signed certificate as a certificate error.\n\nSee [https://bugs.chromium.org/p/chromium/issues/detail?id=110649#c8](https://bugs.chromium.org/p/chromium/issues/detail?id=110649#c8).\n\n[Mkcert](https://github.com/FiloSottile/mkcert) can create a locally-trusted development certificate for your dev servers to prevent this from happening.",
+    "date": "2025-01-24",
+    "path": "chrome-certificates.md",
+    "title": "No browser cache with self-signed certificates"
+  },
+  {
+    "content": "# Buttons can have a value like input elements\n\nThe `<button>` element can have a value like `<input>` and this value can also be passed to the server when the form is submitted:\n\n```html\n<form action=\"#\" method=\"POST\">\n  <input type=\"text\" name=\"name\" value=\"Peter\" />\n  <button type=\"submit\" name=\"_action\" value=\"add\">Add</button>\n  <button type=\"submit\" name=\"_action\" value=\"delete\">Delete</button>\n</form>\n```\n\nThe form can be submitted with this data without the need of JavaScript. On the server, you can check the value of `_action` to decide what to do next based on which button the user clicked to submit the form.\n\n\nIf you are submitting the form programmatically using JavaScript, `FormData` needs to know which button was used to submit the form:  \n\n```js\ndocument.querySelector(\"form\").addEventListener(\"submit\", (event) => {\n  event.preventDefault();\n\n  const formData = new FormData(event.target);\n\n  // The FormData does not know how the form was submitted. \n  // There could be more than one submit button on the form and\n  // we want to include the one that was used to submit the form. \n  // We append the button (also known as the submitter) to FormData.\n  // See more: https://developer.mozilla.org/en-US/docs/Web/API/SubmitEvent/submitter\n  if (event.submitter) {\n    formData.append(event.submitter.name, event.submitter.value);\n  }\n\n  const data = Object.fromEntries(formData.entries());\n  console.log(data); // {name: \"Peter\", _action: \"add\"}\n  \n  // When ready, submit the form programmatically\n});\n```\n\n[Remix](https://remix.run/) does a great job at using this technique - they demonstrate it in their video [Remix Single: Multiple Forms and Single Button Mutations](https://www.youtube.com/watch?v=w2i-9cYxSdc). The Remix implementation can be found [here](https://github.com/remix-run/remix/blob/db2c31f64affb2095e4286b91306b96435967969/packages/remix-react/components.tsx#L856).",
+    "date": "2025-01-24",
+    "path": "buttons-can-have-a-value-like-input-elements.md",
+    "title": "Buttons can have a value like input elements"
+  },
+  {
+    "content": "# Add custom config to Axios requests\n\n[Axios](https://axios-http.com/) supports adding custom config to requests that can be used later throughout the request.\n\nHere is an example adding a custom config called `endpointName`:\n\n```tsx\nconst instance = axios.create();\n\nconst { data } = await instance.get(\"/api\", { \n  endpointName: \"myApi\"\n});\n```\n\nIt can be used in [interceptors](https://axios-http.com/docs/interceptors):\n\n```tsx\ninstance.interceptors.request.use(function (config) {\n  console.log(config.endpointName);\n  return config;\n});\n\ninstance.interceptors.response.use(function (response) {\n  console.log(response.config.endpointName);\n  return response;\n});\n```\n\nIt is also included in Axios errors:\n\n```tsx\ninstance.interceptors.response.use(null, function (error) {\n  if (isAxiosError(error)) {\n    console.log(error.config.endpointName);\n  }\n\n  return Promise.reject(error);\n});\n\n```\n\n## TypeScript support\n\nCreate an `axios.d.ts` and add the custom config under `AxiosRequestConfig`:\n\n```tsx\nimport \"axios\";\n\ndeclare module \"axios\" {\n  export interface AxiosRequestConfig {\n    endpointName?: string;\n  }\n}\n```",
+    "date": "2025-01-24",
+    "path": "axios-interceptors.md",
+    "title": "Add custom config to Axios requests"
+  },
+  {
+    "content": "# Get current page URL in Astro\n\n[`Astro.url`](https://docs.astro.build/en/reference/api-reference/#astrourl) returns the current page URL from the Request object. The return value is a [URL](https://developer.mozilla.org/en-US/docs/Web/API/URL) object which contains properties like pathname and origin. \n\n```js\nconst currentPath = Astro.url.pathname;\n```\n\nUseful when you need to highlight navigation links based on current page:\n\n```jsx\n<a href=\"/me\" class={currentPath === '/me' ? 'active' : ''}>\n  About Me\n</a>\n```",
+    "date": "2025-01-24",
+    "path": "astro-url.md",
+    "title": "Get current page URL in Astro"
+  },
+  {
+    "content": "# Astro's image integration\n\nAstro's `<Image />` component can render optimised images. It can be used on local images and remote images.\n\n```tsx\nimport { Image } from '@astrojs/image/components';\n```\n\nThe required props:\n\n| Image Type                  | Props                                 |\n| --------------------------- | ------------------------------------- |\n| Local images in `src/`    | `src`, `alt`                          |\n| Remote images               | `src`, `alt`, `format` and dimensions |\n| Local images in `public/` | `src`, `alt`, `format` and dimensions |\n\n- Local images in `public/` are considered remote images.\n- The `<Image />` component does not know the dimensions or the format of the remote images, which is why they must be provided.\n\n## Dimensions\n\nYou will need provide either:\n- `width` _and_ `height`, or\n- `width` or `height` _and_ an `aspectRatio` (to avoid layout shift).",
+    "date": "2025-01-24",
+    "path": "astro-image.md",
+    "title": "Astro's image integration"
+  },
+  {
+    "content": "# GPTBot is OpenAI’s web crawler \n\nOpenAI's web crawler has a user-agent:\n\n```\nUser agent token: GPTBot\nFull user-agent string: Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; GPTBot/1.0; +https://openai.com/gptbot)\n```\n\nWhich means it can be restricted to crawl your site using robots.txt:\n\n```\nUser-agent: GPTBot\nDisallow: /\n```\n\nFound in OpenAI's [documentation](https://platform.openai.com/docs/gptbot).",
+    "date": "2025-01-24",
+    "path": "ai-gptbot.md",
+    "title": "GPTBot is OpenAI’s web crawler "
+  },
+  {
+    "content": "# Add features to your Netlify site with Snippet Injection\n\n[Netlify](https://netlify.com/) allows you to add code to your site at the CDN level by using a feature called [Snippet Injection](https://www.netlify.com/docs/inject-analytics-snippets/).\n\nSnippet injection is done without needing to update your code base, rebuilding or deploying your site. Anyone on your team can add scripts without being familar with the technologies used building the site.\n\nFrom your Netlify site dashboard, you will find Snippet Injection under to **Site settings** > **Build & deploy** > **Post processing**.\n\nSnippet Injection can come very useful for:\n - Adding analytics (eg Google Analytics)\n - Adding pixel tracking (eg Facebook Pixel)\n - [Adding Web Monetization](https://www.netlify.com/blog/2020/12/14/add-web-monetization-to-your-sites-with-snippet-injection/)\n\nSome fun examples of how snippet injection can be used:\n- [Adding elevator.js](https://www.netlify.com/blog/2021/12/20/how-to-add-features-to-your-site-via-snippet-injection/)\n- [Adding GitHub View Source ribbon](https://www.netlify.com/blog/2018/09/06/promoting-open-source-with-netlify-snippet-injection/)\n\nLearn more about [Snippet Injection](https://www.netlify.com/docs/inject-analytics-snippets/).",
+    "date": "2025-01-24",
+    "path": "add-features-to-your-netlify-site-with-snippet-injection.md",
+    "title": "Add features to your Netlify site with Snippet Injection"
+  },
+  {
+    "content": "# Add color using FORCE_COLOR\n\nNode.js supports the `FORCE_COLOR` environment variable to force color in the terminal output.\n\n```js\nFORCE_COLOR=0 // 2 colors (no color)\nFORCE_COLOR=1 // 16 colors\nFORCE_COLOR=2 // 256 colors\nFORCE_COLOR=3 // 16,777,216 colors\n```\n\nColor is automatically disabled when a process is piping output into another process. Use `FORCE_COLOR` to force color in the piped output.",
+    "date": "2025-01-24",
+    "path": "add-color-using-force-color.md",
+    "title": "Add color using FORCE_COLOR"
+  },
+  {
+    "content": "# There are actually 50 CSS length units\n \nFollowing my previous learning that there are [44 CSS length unit](https://petermekhaeil.com/til/44-css-length-units/), there are actually 50 length units.\n\n[Adam Argyle](https://twitter.com/argyleink/status/1612940352889196546) has updated us that there is 6 more that were missing from the list:\n\n\n## Viewport\n\n| Unit | Definition |\n|------|------------|\n| svmin | The small viewport of `vmin` |\n| lvmin | The large viewport of `vmin` |\n| dvmin | The dynamic viewport of `vmin` |\n| svmax | The small viewport of `vmax` |\n| lvmax | The large viewport of `vmax` |\n| dvmax | The dynamic viewport of `vmax` |\n\n## Small vs Large vs Dynamic Viewport\n\n- \"Large Viewport\" is the largest possible viewport which includes the browser UI.\n- \"Small Viewport\" is smallest possible viewport, leaving space for the browser UI.\n- \"Dynamic Viewport\" is automatically sized in response to browser UI expanding or retracting.\n\n## Learn More\n\n- [The Large, Small, and Dynamic Viewports](https://www.bram.us/2021/07/08/the-large-small-and-dynamic-viewports/)\n- [MDN Docs: Relative length units based on viewport](https://developer.mozilla.org/en-US/docs/Web/CSS/length#relative_length_units_based_on_viewport)",
+    "date": "2025-01-24",
+    "path": "50-css-length-units.md",
+    "title": "There are actually 50 CSS length units"
+  },
+  {
+    "content": "# There are 44 CSS length units\n\n[Adam Argyle](https://nerdy.dev/) has written a [Codepen](https://codepen.io/argyleink/pen/oNxbNzy) that lists the different units.\n\nTo learn more about what each unit means:\n- [Adam Argyle: New CSS Relative Units](https://nerdy.dev/new-relative-units-ric-rex-rlh-and-rch)\n- [CSS length](https://developer.mozilla.org/en-US/docs/Web/CSS/length)\n- [CSS Values and Units](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Values_and_Units)\n- [W3C CSS Values and Units](https://www.w3.org/TR/css-values-4)\n\n## Relative\n\n| Unit | Definition |\n|------|------------|\n| % | Percentage of the parent element's font size |\n| em | Font size of the element |\n| ex | Height of the element's font |\n| ch | Width of the \"0\" (zero) character of the element's font |\n| cap | Hight of the capital letters of the element's font |\n| ic | [Advance measure](https://developer.mozilla.org/en-US/docs/Glossary/Advance_measure) of the `水` CJK (Chinese/Japanese/Korean) character of the element's font |\n| lh | Height of the element's line height |\n\n## Root Relative\n\n| Unit | Definition |\n|------|------------|\n| rem | Font size of the root element |\n| rex | Height of the root element's font |\n| rch | Width of the \"0\" (zero) character of the root element's font |\n| rlh | Height of the root element's line height |\n| ric | [Advance measure](https://developer.mozilla.org/en-US/docs/Glossary/Advance_measure) of the `水` CJK (Chinese/Japanese/Korean) character of the root element's font |\n| rcap | Height of the capital letters of the root element's font |\n\n## Absolute\n\n| Unit | Definition |\n|------|------------|\n| px | Pixels |\n| pt | Points |\n| pc | Picas |\n| in | Inches |\n| cm | Centimeters |\n| mm | Millimeters |\n| Q | Quarter-millimeters |\n\n## Viewport\n\n| Unit | Definition |\n|------|------------|\n| vw | Viewport width |\n| vh | Viewport height |\n| vi | Viewport inches |\n| vb | Viewport breadths |\n| dvw | Dynamic viewport width |\n| dvh | Dynamic viewport height |\n| dvi | Dynamic viewport inches |\n| dvb | Dynamic viewport breadths |\n| svw | Smallest possible viewport width |\n| svh | Smallest possible viewport height |\n| svi | Smallest possible viewport inches |\n| svb | Smallest possible viewport breadths |\n| lvw | Largest possible viewport width |\n| lvh | Largest possible viewport height |\n| lvi | Largest possible viewport inches |\n| lvb | Largest possible viewport breadths |\n| vmin | Smallest value between the viewport's width and height |\n| vmax | Largest value between the viewport's width and height |\n\n## Container\n\nSee [CSS Container Queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Container_Queries).\n\n| Unit | Definition |\n|------|------------|\n| cqw | Container width |\n| cqh | Container height |\n| cqi | Container inches |\n| cqb | Container breadths |\n| cqmin | Smallest value between the element's parent container's width and height |\n| cqmax | Largests value between the element's parent container's width and height |",
+    "date": "2025-01-24",
+    "path": "44-css-length-units.md",
+    "title": "There are 44 CSS length units"
+  }
+]

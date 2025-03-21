@@ -1,0 +1,44 @@
+name: Update README.md when new TIL is added.
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write  # Explicitly grant write permissions to the repository content
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout the repository
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      # Step 2: Ensure the update-readme.sh script is executable
+      - run: chmod +x "${GITHUB_WORKSPACE}/update-readme.sh"
+        name: Ensure update-readme.sh is executable
+
+      # Step 3: Run the update-readme.sh script
+      - run: |
+          echo "Running update-readme.sh"
+          "${GITHUB_WORKSPACE}/update-readme.sh"
+        name: Run update-readme.sh script
+
+      # Step 4: Set up Git configuration and commit changes
+      - run: |
+          echo "Setting up Git configuration"
+          git config user.name krisyotam
+          git config user.email krisyotam@protonmail.com
+
+          # Add and commit changes to README.md and feed.json
+          git add README.md
+          git add feed.json
+          git diff-index --quiet HEAD || git commit -m "Update TIL listing"
+          echo "Changes committed"
+
+          # Push changes
+          git push
+        name: Commit and Push Changes
