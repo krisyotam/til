@@ -19,25 +19,43 @@ jobs:
         name: Checkout Repository
 
       # Step 2: Set up jq (ensure dependency is available)
-      - run: sudo apt-get update && sudo apt-get install -y jq
+      - run: |
+          sudo apt-get update || { echo "Failed to update package list"; exit 1; }
+          sudo apt-get install -y jq || { echo "Failed to install jq"; exit 1; }
         name: Install jq
 
       # Step 3: Ensure the update-readme.sh script is executable
-      - run: chmod +x ./update-readme.sh
+      - run: |
+          if [[ ! -f ./update-readme.sh ]]; then
+            echo "Error: update-readme.sh not found in repository root"
+            exit 1
+          fi
+          chmod +x ./update-readme.sh || { echo "Failed to make update-readme.sh executable"; exit 1; }
         name: Make update-readme.sh Executable
 
-      # Step 4: Run the update-readme.sh script
-      - run: ./update-readme.sh
+      # Step 4: Run the update-readme.sh script with debug output
+      - run: |
+          echo "Listing files in learnings/:"
+          ls -l ./learnings/ || { echo "Failed to list learnings/ directory"; exit 1; }
+          echo "Running update-readme.sh..."
+          ./update-readme.sh || { echo "Error: update-readme.sh failed"; exit 1; }
+          echo "Script completed. Checking outputs:"
+          echo "README.md content:"
+          cat README.md || { echo "Failed to read README.md"; exit 1; }
+          echo "feed.json content:"
+          cat feed.json || { echo "Failed to read feed.json"; exit 1; }
         name: Run update-readme.sh Script
 
-      # Step 5: Commit and push changes
+      # Step 5: Commit and push changes with error handling
       - run: |
-          git config user.name "krisyotam"
-          git config user.email "krisyotam@protonmail.com"
-          git add README.md feed.json
+          git config user.name "krisyotam" || { echo "Failed to set git user.name"; exit 1; }
+          git config user.email "krisyotam@protonmail.com" || { echo "Failed to set git user.email"; exit 1; }
+          git add README.md feed.json || { echo "Failed to stage README.md or feed.json"; exit 1; }
+          echo "Staged changes:"
+          git diff --staged || { echo "Failed to show staged changes"; exit 1; }
           if ! git diff --staged --quiet; then
-            git commit -m "Update TIL listing"
-            git push
+            git commit -m "Update TIL listing" || { echo "Failed to commit changes"; exit 1; }
+            git push || { echo "Failed to push changes"; exit 1; }
             echo "Changes committed and pushed successfully"
           else
             echo "No changes to commit"
