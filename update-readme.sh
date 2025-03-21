@@ -13,17 +13,34 @@ jq -n '[]' > feed.json
 dir="./learnings"
 til_array=()
 
+# Function to generate a random date between 2020-01-01 and 2025-01-01
+random_date() {
+  start_epoch=$(date -d "2020-01-01" +%s)
+  end_epoch=$(date -d "2025-01-01" +%s)
+  random_epoch=$((start_epoch + RANDOM % (end_epoch - start_epoch)))
+  date -d "@$random_epoch" +%Y-%m-%d
+}
+
 # Collect metadata for existing files
 for filename in "$dir"/*; do
   if [[ -f "$filename" ]]; then
-    git_timestamp=$(git log --format="%ci" --diff-filter=A -- "$filename" 2>/dev/null || echo "1970-01-01 00:00:00 +0000")
-    date="${git_timestamp%% *}"  # Use only the date part (e.g., "2025-03-20")
+    # Check for YAML front matter and extract date
+    if grep -q "^---$" "$filename"; then
+      date=$(sed -n '/^---$/,/^---$/p' "$filename" | grep "^date:" | sed 's/date: //;s/ *$//')
+      if [[ -z "$date" || ! "$date" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+        echo "Warning: Invalid or missing date in YAML for $filename, assigning random date" >&2
+        date=$(random_date)
+      fi
+    else
+      echo "Warning: No YAML front matter in $filename, assigning random date" >&2
+      date=$(random_date)
+    fi
     til_array+=("$date:$filename")
   fi
 done
 
-# Sort files by date (descending)
-mapfile -t sorted_array < <(printf "%s\n" "${til_array[@]}" | sort -r -t':' -k1,1)
+# Sort files by date (ascending, oldest first, newest last)
+mapfile -t sorted_array < <(printf "%s\n" "${til_array[@]}" | sort -t':' -k1,1)
 
 # Count the number of items
 num_items="${#sorted_array[@]}"
@@ -35,7 +52,7 @@ echo -e "_**${num_items}** TILs and counting..._\n" >> README.md
 json_data=()
 for element in "${sorted_array[@]}"; do
   IFS=':' read -r date filename <<< "$element"
-  title=$(head -n 1 "$filename" | sed 's/# //')
+  title=$(sed '1{/^---$/d;};1q' "$filename" | sed 's/# //')  # Skip YAML, get first non-YAML line
   path=$(basename "$filename")
   content=$(cat "$filename")
 
