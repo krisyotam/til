@@ -1,44 +1,47 @@
-name: Update README.md when new TIL is added.
+name: Update README.md and feed.json on TIL Push
 
 on:
   push:
     branches: [main]
 
 permissions:
-  contents: write  # Explicitly grant write permissions to the repository content
+  contents: write  # Grant write access to repository contents
 
 jobs:
   update:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
-      - uses: actions/checkout@v2
+      # Step 1: Checkout the repository with full history
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+        name: Checkout Repository
 
-      # Step 2: Ensure the update-readme.sh script is executable
-      - run: chmod +x "${GITHUB_WORKSPACE}/update-readme.sh"
-        name: Ensure update-readme.sh is executable
+      # Step 2: Set up jq (ensure dependency is available)
+      - run: sudo apt-get update && sudo apt-get install -y jq
+        name: Install jq
 
-      # Step 3: Run the update-readme.sh script
+      # Step 3: Ensure the update-readme.sh script is executable
+      - run: chmod +x ./update-readme.sh
+        name: Make update-readme.sh Executable
+
+      # Step 4: Run the update-readme.sh script
+      - run: ./update-readme.sh
+        name: Run update-readme.sh Script
+
+      # Step 5: Commit and push changes
       - run: |
-          echo "Running update-readme.sh"
-          "${GITHUB_WORKSPACE}/update-readme.sh"
-        name: Run update-readme.sh script
-
-      # Step 4: Set up Git configuration and commit changes
-      - run: |
-          echo "Setting up Git configuration"
-          git config user.name krisyotam
-          git config user.email krisyotam@protonmail.com
-
-          # Add and commit changes to README.md and feed.json
-          git add README.md
-          git add feed.json
-          git diff-index --quiet HEAD || git commit -m "Update TIL listing"
-          echo "Changes committed"
-
-          # Push changes
-          git push
+          git config user.name "krisyotam"
+          git config user.email "krisyotam@protonmail.com"
+          git add README.md feed.json
+          if ! git diff --staged --quiet; then
+            git commit -m "Update TIL listing"
+            git push
+            echo "Changes committed and pushed successfully"
+          else
+            echo "No changes to commit"
+          fi
         name: Commit and Push Changes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
