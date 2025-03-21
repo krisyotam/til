@@ -31,11 +31,18 @@ for filename in "$dir"/*; do
         echo "Warning: Invalid or missing date in YAML for $filename, assigning random date" >&2
         date=$(random_date)
       fi
+      # Extract title from first # line after YAML
+      title=$(sed -n '/^---$/,/^---$/d;/^#/p' "$filename" | head -n 1 | sed 's/# //')
     else
       echo "Warning: No YAML front matter in $filename, assigning random date" >&2
       date=$(random_date)
+      title=$(sed -n '/^#/p' "$filename" | head -n 1 | sed 's/# //')
     fi
-    til_array+=("$date:$filename")
+    if [[ -z "$title" ]]; then
+      echo "Warning: No # header found in $filename, using filename as title" >&2
+      title=$(basename "$filename" .md)
+    fi
+    til_array+=("$date:$filename:$title")
   fi
 done
 
@@ -51,8 +58,7 @@ echo -e "_**${num_items}** TILs and counting..._\n" >> README.md
 # Build JSON array and README entries
 json_data=()
 for element in "${sorted_array[@]}"; do
-  IFS=':' read -r date filename <<< "$element"
-  title=$(sed '1{/^---$/d;};1q' "$filename" | sed 's/# //')  # Skip YAML, get first non-YAML line
+  IFS=':' read -r date filename title <<< "$element"
   path=$(basename "$filename")
   content=$(cat "$filename")
 
