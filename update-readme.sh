@@ -17,8 +17,18 @@ til_array=()
 random_date() {
   start_epoch=$(date -d "2020-01-01" +%s)
   end_epoch=$(date -d "2025-01-01" +%s)
-  random_epoch=$((start_epoch + RANDOM % (end_epoch - start_epoch)))
+  random_epoch=$(( start_epoch + RANDOM % (end_epoch - start_epoch) ))
   date -d "@$random_epoch" +%Y-%m-%d
+}
+
+# Function to ensure the date is unique by incrementing by one day if needed
+ensure_unique_date() {
+  local base_date="$1"
+  local unique_date="$base_date"
+  while [[ " ${used_dates[*]} " =~ " $unique_date " ]]; do
+    unique_date=$(date -d "$unique_date + 1 day" +%Y-%m-%d)
+  done
+  echo "$unique_date"
 }
 
 # Collect metadata for existing files
@@ -26,15 +36,15 @@ for filename in "$dir"/*; do
   if [[ -f "$filename" ]]; then
     # Check for YAML front matter
     if grep -q "^---$" "$filename"; then
-      date=$(sed -n '/^---$/,/^---$/p' "$filename" | grep "^date:" | sed 's/date: //;s/ *$//')
+      date_str=$(sed -n '/^---$/,/^---$/p' "$filename" | grep "^date:" | sed 's/date: //;s/ *$//')
       title=$(sed -n '/^---$/,/^---$/p' "$filename" | grep "^title:" | sed 's/title: //;s/ *$//')
       
       # Process content by removing YAML frontmatter
       content=$(sed -e '1{/^---$/!q;};/^---$/,/^---$/d' "$filename")
       
-      if [[ -z "$date" || ! "$date" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+      if [[ -z "$date_str" || ! "$date_str" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
         echo "Warning: Invalid or missing date in YAML for $filename, assigning random date" >&2
-        date=$(random_date)
+        date_str=$(random_date)
       fi
       if [[ -z "$title" ]]; then
         echo "Warning: No title in YAML for $filename, using first # header" >&2
@@ -42,7 +52,7 @@ for filename in "$dir"/*; do
       fi
     else
       echo "Warning: No YAML front matter in $filename, assigning random date" >&2
-      date=$(random_date)
+      date_str=$(random_date)
       title=$(sed -n '/^#/p' "$filename" | head -n 1 | sed 's/# //')
       content=$(cat "$filename")
     fi
@@ -52,69 +62,63 @@ for filename in "$dir"/*; do
       title=$(basename "$filename" .md)
     fi
     
-    til_array+=("$date:$filename:$title")
+    til_array+=("$date_str:$filename:$title")
   fi
 done
 
-# Sort files by date (descending, newest first, oldest last)
+# Sort files by date (descending, newest first)
 mapfile -t sorted_array < <(printf "%s\n" "${til_array[@]}" | sort -r -t':' -k1,1)
-
-# Count the number of items
 num_items="${#sorted_array[@]}"
 
 # Add summary line to README.md
 echo -e "_**${num_items}** TILs and counting..._\n" >> README.md
 
-# Build JSON array and README entries with IDs
 json_data=()
-id=$((num_items))  # Start ID from total count (newest gets highest)
-used_dates=()      # Array to track used dates
+id=$((num_items))
+used_dates=()  # Array to track used dates
 
 for element in "${sorted_array[@]}"; do
-  IFS=':' read -r date filename title <<< "$element"
+  IFS=':' read -r date_str filename title <<< "$element"
   new_filename="$dir/$id.md"
   
-  # Ensure unique date for each post
-  while [[ " ${used_dates[*]} " =~ " $date " ]]; do
-    date=$(random_date)
-  done
-  used_dates+=("$date")
+  # Ensure unique date using a quick increment if needed
+  unique_date=$(ensure_unique_date "$date_str")
+  used_dates+=("$unique_date")
   
   # Rename the file if needed
   if [[ "$filename" != "$new_filename" ]]; then
     mv "$filename" "$new_filename"
-    git add "$filename" "$new_filename"  # Stage the rename for Git
+    git add "$filename" "$new_filename"
   fi
   
   path=$(basename "$new_filename")
   
   # Read the file content
   if grep -q "^---$" "$new_filename"; then
-    # For files with YAML, extract content without frontmatter but DO NOT prepend the title
+    # For YAML posts, extract content without frontmatter (DO NOT prepend the title)
     content=$(sed -e '1{/^---$/!q;};/^---$/,/^---$/d' "$new_filename")
   else
-    # For files without YAML, just read the content normally
     content=$(cat "$new_filename")
   fi
 
-  # Add to README.md
-  echo "- $date: [$title](https://github.com/krisyotam/til/blob/main/$path)" >> README.md
+  # Add entry to README.md
+  echo "- $unique_date: [$title](https://github.com/krisyotam/til/blob/main/$path)" >> README.md
 
-  # Collect JSON data
+  # Build JSON data entry
   json_data+=("$(jq -n \
     --arg content "$content" \
-    --arg date "$date" \
+    --arg date "$unique_date" \
     --arg path "$path" \
     --arg title "$title" \
     --argjson id "$id" \
     '{"content": $content, "date": $date, "path": $path, "title": $title, "id": $id}')"
   )
   
-  id=$((id - 1))  # Decrement ID for next (older) entry
+  id=$((id - 1))
 done
 
 # Write feed.json in one go
 printf '%s\n' "${json_data[@]}" | jq -s '.' > feed.json
 
-# Stage renamed files and updated README.md/feed.json for commit
+# Stage updated files for commit
 git add README.md feed.json
